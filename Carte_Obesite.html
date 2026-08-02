@@ -3,6 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#2b3242">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Carte Obésité">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <title>carte obésité</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -21,40 +28,33 @@
   .brand .sub{font-size:11.5px;color:#aeb6c6;margin-top:2px;}
   .dot{width:26px;height:26px;border-radius:7px;background:var(--violet);display:grid;place-items:center;}
   .dot svg{width:15px;height:15px;}
-  .tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
   .seg{display:flex;gap:5px;background:var(--slate-2);padding:4px;border-radius:9px;}
-  .seg button{border:0;cursor:pointer;font:inherit;font-size:12px;font-weight:600;color:#c7cdda;
-    background:transparent;padding:6px 11px;border-radius:6px;}
+  .seg button{border:0;cursor:pointer;font:inherit;font-size:12px;font-weight:600;color:#c7cdda;background:transparent;padding:6px 11px;border-radius:6px;}
   .seg button.actif{background:#fff;color:var(--ink);}
-  .fond-toggle{border:1px solid rgba(255,255,255,.25);background:var(--slate-2);color:#e7eaf1;cursor:pointer;font:inherit;font-size:12px;font-weight:600;padding:8px 13px;border-radius:9px;display:inline-flex;align-items:center;gap:7px;}
-  .fond-toggle:hover{background:#464f66;}
-  .load-btn{border:1px solid rgba(255,255,255,.25);background:transparent;color:#e7eaf1;cursor:pointer;
-    font:inherit;font-size:12px;font-weight:600;padding:6px 12px;border-radius:7px;}
+  .fond-toggle,.aide-btn,.install-btn{border:1px solid rgba(255,255,255,.25);background:var(--slate-2);color:#e7eaf1;cursor:pointer;font:inherit;font-size:12px;font-weight:600;padding:8px 13px;border-radius:9px;display:inline-flex;align-items:center;gap:7px;}
+  .fond-toggle:hover,.aide-btn:hover,.install-btn:hover{background:#464f66;}
+  .aide-btn{border-color:var(--violet);color:#f0cfe6;}
+  .install-btn{display:none;border-color:var(--violet);background:var(--violet);color:#fff;}
   .filtres{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px;align-items:center;}
   .filtres .lbl{font-size:11px;color:#aeb6c6;margin-right:2px;}
-  .chip{border:1px solid rgba(255,255,255,.22);cursor:pointer;font:inherit;font-size:11.5px;font-weight:600;
-    color:#e7eaf1;background:transparent;padding:5px 11px;border-radius:20px;}
+  .chip{border:1px solid rgba(255,255,255,.22);cursor:pointer;font:inherit;font-size:11.5px;font-weight:600;color:#e7eaf1;background:transparent;padding:5px 11px;border-radius:20px;}
   .chip.on{background:var(--violet);border-color:var(--violet);}
   #map{flex:1;width:100%;}
-  #hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:900;background:#fff;
-    border:1px solid var(--line);border-radius:12px;padding:20px 24px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.12);max-width:340px;}
-  #hint p{margin:0 0 12px;font-size:13px;color:var(--muted);}
-  #hint button{background:var(--violet);color:#fff;border:0;border-radius:8px;padding:9px 16px;font:inherit;font-weight:600;cursor:pointer;}
+  #hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:900;background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 24px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.12);max-width:340px;}
+  #hint p{margin:0;font-size:13px;color:var(--muted);}
   .leaflet-popup-content-wrapper{border-radius:12px;box-shadow:0 10px 30px rgba(20,28,45,.2);}
   .leaflet-popup-content{margin:0 !important;width:280px !important;}
   .pop-logo{width:100%;height:96px;object-fit:contain;background:var(--violet-soft);border-radius:12px 12px 0 0;padding:10px;}
   .pop-logo.vide{display:flex;align-items:center;justify-content:center;color:#b98bb0;font-size:12px;}
   .fiche-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:12px 14px 0;}
-  .fiche-head h2{font-size:15px;margin:0;color:var(--ink);line-height:1.25;}
+  .fiche-head h2{font-size:15px;margin:0;color:var(--ink);line-height:1.25;flex:1;}
+  .fa-actions{display:flex;gap:5px;flex:0 0 auto;}
+  .fa-actions button{border:1px solid var(--line);background:#fff;cursor:pointer;border-radius:8px;width:30px;height:30px;color:var(--slate);display:grid;place-items:center;font-size:13px;}
+  .fa-actions button:hover{background:var(--paper);color:var(--violet);}
   .cats{display:flex;gap:5px;flex-wrap:wrap;padding:8px 14px 0;}
-  .cat{font-size:10px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:#fff;
-    background:var(--violet);padding:3px 8px;border-radius:20px;}
-  .cat.bariatrique{background:#b45309;} .cat.enfants{background:#0e8a7d;}
-  .cat.adolescent{background:#2563eb;} .cat.pair-aidant{background:#7c3aed;}
-  .actions{display:flex;gap:6px;padding:8px 14px 0;}
-  .actions button{flex:1;border:1px solid var(--line);background:#fff;cursor:pointer;border-radius:8px;
-    padding:7px;font:inherit;font-size:12px;font-weight:600;color:var(--slate);display:flex;align-items:center;justify-content:center;gap:6px;}
-  .actions button:hover{background:var(--paper);}
+  .cat{font-size:10px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:#fff;background:var(--violet);padding:3px 8px;border-radius:20px;}
+  .cat.bariatrique{background:#b45309;} .cat.enfants{background:#0e8a7d;} .cat.adolescent{background:#2563eb;} .cat.pair-aidant{background:#7c3aed;}
   .fiche{padding:8px 14px 14px;max-height:240px;overflow:auto;line-height:1.45;font-size:13px;color:#374151;}
   .fiche table{border-collapse:collapse;width:100%;margin:6px 0;font-size:12px;}
   .fiche td,.fiche th{border:1px solid var(--line);padding:5px 7px;vertical-align:top;}
@@ -69,12 +69,33 @@
   .modal{position:fixed;inset:0;background:rgba(20,28,45,.55);z-index:3000;display:none;align-items:center;justify-content:center;padding:22px;}
   .modal.ouvert{display:flex;}
   .modal-box{background:#fff;border-radius:14px;max-width:640px;width:100%;max-height:88vh;overflow:auto;}
-  .modal-bar{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:14px 20px;}
-  .modal-bar span{font-size:11px;font-weight:700;letter-spacing:.4px;color:var(--violet);text-transform:uppercase;}
-  .modal-bar button{border:0;background:var(--paper);cursor:pointer;border-radius:8px;width:32px;height:32px;font-size:18px;}
-  .modal .fiche{max-height:none;padding:18px 26px 30px;font-size:14px;}
+  .modal-bar{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 18px;z-index:2;}
+  .modal-bar .m-nom{font-size:16px;font-weight:700;color:var(--ink);flex:1;}
+  .modal-bar .m-actions{display:flex;gap:6px;flex:0 0 auto;}
+  .modal-bar button{border:1px solid var(--line);background:#fff;cursor:pointer;border-radius:8px;padding:7px 11px;font:inherit;font-size:12px;font-weight:600;color:var(--slate);display:inline-flex;align-items:center;gap:6px;}
+  .modal-bar button.close{width:34px;height:34px;justify-content:center;padding:0;font-size:18px;}
+  .modal .fiche{max-height:none;padding:16px 22px 26px;font-size:14px;}
   footer{background:#fff;border-top:1px solid var(--line);font-size:11px;color:var(--muted);padding:7px 18px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;}
-  @media (max-width:600px){.leaflet-popup-content{width:220px !important;}.modal{padding:0;}.modal-box{border-radius:0;height:100vh;max-height:100vh;}}
+  #foot-date{color:var(--violet);font-weight:600;}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--slate);color:#fff;padding:12px 18px;border-radius:10px;font-size:12.5px;max-width:90%;width:auto;text-align:center;line-height:1.4;opacity:0;transition:opacity .25s;pointer-events:none;z-index:4000;box-shadow:0 6px 20px rgba(0,0,0,.3);}
+  .toast.show{opacity:1;}
+  /* guide overlay */
+  .guide-overlay{display:none;position:fixed;inset:0;background:rgba(20,28,45,.6);backdrop-filter:blur(2px);z-index:3500;align-items:center;justify-content:center;padding:16px;}
+  .guide-overlay.open{display:flex;}
+  .guide-panel{background:#fff;border-radius:18px;max-width:480px;width:100%;max-height:calc(100vh - 32px);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+  .guide-head{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;background:var(--violet);color:#fff;}
+  .guide-head-title{font-weight:700;font-size:15px;}
+  .guide-head-close{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;line-height:1;}
+  .guide-tabs{display:flex;border-bottom:2px solid var(--line);}
+  .guide-tab{flex:1;padding:12px 6px;font:inherit;font-size:12px;font-weight:700;border:none;background:var(--paper);color:var(--muted);cursor:pointer;line-height:1.3;}
+  .guide-tab.active{background:#fff;color:var(--violet);border-bottom:2px solid var(--violet);margin-bottom:-2px;}
+  .guide-body{overflow-y:auto;padding:18px 20px;}
+  .guide-tab-content{display:none;font-size:13.5px;line-height:1.6;color:#374151;}
+  .guide-tab-content.active{display:block;}
+  .guide-tab-content h4{margin:0 0 10px;color:var(--slate);}
+  .guide-tab-content a{color:var(--teal);font-weight:600;}
+  .wip{color:var(--muted);font-style:italic;}
+  @media (max-width:600px){.leaflet-popup-content{width:220px !important;}.modal{padding:0;}.modal-box{border-radius:0;height:100vh;max-height:100vh;}.guide-tab span{display:none;}}
 </style>
 </head>
 <body>
@@ -85,6 +106,7 @@
       <div><h1>carte obésité</h1><div class="sub">Associations &mdash; publiée par OMEAVE</div></div>
     </div>
     <div class="tools">
+      <button class="install-btn" id="btn-install" type="button">📲 Installer</button>
       <div class="seg" id="zones">
         <button data-zone="metropole" class="actif" type="button">Metropole</button>
         <button data-zone="guyane" type="button">Guyane</button>
@@ -92,46 +114,72 @@
         <button data-zone="antilles" type="button">Antilles</button>
       </div>
       <button class="fond-toggle" id="btn-fond" type="button"><i class="fa fa-exchange"></i> Fond IGN</button>
+      <button class="aide-btn" id="btn-aide" type="button">❓ Aide</button>
     </div>
   </div>
   <div class="filtres" id="filtres"><span class="lbl">Filtrer :</span></div>
 </header>
 <div id="map"></div>
-<div id="hint" style="display:none">
-  <p><b>Carte_Obesite.geojson</b> introuvable a cote de cette page.<br>Il doit se trouver dans le meme dossier que ce fichier HTML.</p>
-</div>
+<div id="hint" style="display:none"><p><b>Carte_Obesite.geojson</b> introuvable a cote de cette page.<br>Il doit se trouver dans le meme dossier que ce fichier HTML.</p></div>
+
 <div class="modal" id="modal" role="dialog" aria-modal="true">
-  <div class="modal-box"><div class="modal-bar"><span id="modal-tag"></span><button id="modal-close">&times;</button></div><div class="fiche" id="modal-fiche"></div></div>
+  <div class="modal-box">
+    <div class="modal-bar">
+      <span class="m-nom" id="modal-tag"></span>
+      <div class="m-actions">
+        <button id="modal-copier"><i class="fa fa-clipboard"></i> Copier</button>
+        <button class="close" id="modal-close">&times;</button>
+      </div>
+    </div>
+    <div id="modal-fiche"></div>
+  </div>
 </div>
-<footer><span>Build 1</span><span>Fonds IGN Geoplateforme / OpenStreetMap.</span></footer>
+
+<!-- GUIDE -->
+<div class="guide-overlay" id="guideOverlay">
+  <div class="guide-panel">
+    <div class="guide-head"><span class="guide-head-title">❓ Aide</span><button class="guide-head-close" id="guide-close">&times;</button></div>
+    <div class="guide-tabs">
+      <button class="guide-tab active" data-tab="guide">📖<span> Guide</span></button>
+      <button class="guide-tab" data-tab="config">⚙️<span> Configuration</span></button>
+      <button class="guide-tab" data-tab="apropos">ℹ️<span> À propos</span></button>
+    </div>
+    <div class="guide-body">
+      <div class="guide-tab-content active" id="content-guide"><h4>📖 Guide d&rsquo;utilisation</h4><p class="wip">Work in progress</p></div>
+      <div class="guide-tab-content" id="content-config"><h4>⚙️ Configuration</h4><p class="wip">Work in progress</p></div>
+      <div class="guide-tab-content" id="content-apropos">
+        <h4>ℹ️ À propos</h4>
+        <p>Ceci est une application de patients pour des patients ou des professionnels de santé qui souhaitent inclure des associations de patients ou des pairs-aidants dans leur parcours.</p>
+        <p>Elle est gratuite et c&rsquo;est un outil annexe du livre «&nbsp;OBÉSITÉ GUIDE PRATIQUE PATIENTS&nbsp;».</p>
+        <p><a href="https://obesite-guide-pratique.eu/" target="_blank" rel="noopener">obesite-guide-pratique.eu</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<footer><span><span id="foot-build">Build 2</span> <span id="foot-date"></span></span><span>Fonds IGN Geoplateforme / OpenStreetMap</span></footer>
 
 <script>
-
+const MENTION="Données obtenues sur le site : https://obesiteguidepratique.github.io/Cartographie/Carte_Obesite.html";
 const CATS=[["bariatrique","Bariatrique"],["enfants","Enfants"],["adolescent","Adolescent"],["pair_aidant","Pair-Aidant"]];
 
-/* ---- rendu de fiche (syntaxe Ma Carte) ---- */
+/* ---- rendu fiche (syntaxe Ma Carte) ---- */
 function preprocessFiche(txt){
   txt=txt.replace(/!\(img_[A-Za-z0-9]+\)/g,"");
-  // video !(url WxH)
   txt=txt.replace(/!\((https?:\/\/[^\s)]+)(?:\s+\d+x\d+)?\)/g,function(m,url){
-    var id=null,y=url.match(/(?:youtu\.be\/|v=)([A-Za-z0-9_-]{6,})/);
-    if(y) id=y[1];
-    if(id) return '<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/'+id+'" allowfullscreen loading="lazy"></iframe></div>';
-    return '<a href="'+url+'" target="_blank" rel="noopener">'+url+'</a>';
-  });
-  // blocs [-- Titre --] et [----]
-  txt=txt.replace(/\[--\s*(.*?)\s*--\]/g,function(m,t){return "\n### "+t+"\n";});
-  txt=txt.replace(/\[----\]/g,"\n");
-  // liens moveTo (on retire l infobulle apres l espace)
-  txt=txt.replace(/\[([^\]]+)\]\(app:\/\/moveTo\?(-?[\d.]+),(-?[\d.]+)[^)]*\)/g,
-    function(m,lab,lng,lat){return '<a href="app://moveTo?'+lng+','+lat+'">'+lab+'</a>';});
-  // icones FA :fa-nom::#hex: / :fa-nom:#hex: / :fa-nom:
-  txt=txt.replace(/:fa-([a-z0-9-]+):(?::?#([0-9a-fA-F]{3,6}):)?/g,function(m,nom,hex){
-    return hex?'<i class="fa fa-'+nom+'" style="color:#'+hex+'"></i>':'<i class="fa fa-'+nom+'"></i>';});
+    var y=url.match(/(?:youtu\.be\/|v=)([A-Za-z0-9_-]{6,})/);
+    if(y) return '<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/'+y[1]+'" allowfullscreen loading="lazy"></iframe></div>';
+    return '<a href="'+url+'" target="_blank" rel="noopener">'+url+'</a>';});
+  txt=txt.replace(/\[--\s*(.*?)\s*--\]/g,"\n### $1\n").replace(/\[----\]/g,"\n");
+  txt=txt.replace(/\[([^\]]+)\]\(app:\/\/moveTo\?(-?[\d.]+),(-?[\d.]+)[^)]*\)/g,function(m,l,lng,lat){return '<a href="app://moveTo?'+lng+','+lat+'">'+l+'</a>';});
+  /* corrige le gras avec espaces : "** X **" -> "**X**" */
+  txt=txt.replace(/\*\*[ \t]*(.+?)[ \t]*\*\*/g,"**$1**");
+  txt=txt.replace(/:fa-([a-z0-9-]+):(?::?#([0-9a-fA-F]{3,6}):)?/g,function(m,n,h){return h?'<i class="fa fa-'+n+'" style="color:#'+h+'"></i>':'<i class="fa fa-'+n+'"></i>';});
   return txt;
 }
 function renderFiche(txt){ return marked.parse(preprocessFiche(txt)); }
-function ficheTexte(txt){ // version texte brut pour le mail
+function ficheTexte(txt){
   var t=txt.replace(/!\(img_[A-Za-z0-9]+\)/g,"");
   t=t.replace(/:fa-[a-z0-9-]+:(?::?#[0-9a-fA-F]{3,6}:)?/g,"");
   t=t.replace(/\[([^\]]+)\]\((?:app:\/\/moveTo\?[^)]*|[^)]*)\)/g,"$1");
@@ -152,37 +200,37 @@ function pin(c){
   return L.divIcon({html:svg,className:"",iconSize:[30,40],iconAnchor:[15,40],popupAnchor:[0,-36]});
 }
 
-let markers=[];
-let filtresActifs=[];
-
+let markers=[]; let filtresActifs=[];
 function catsActives(props){ return CATS.filter(function(c){return props[c[0]]==="oui";}); }
 
-function construirePopup(props){
+function construirePopup(props,pourModal){
   var logo=props.logo
     ? '<img class="pop-logo" src="'+props.logo+'" alt="logo" onerror="this.outerHTML=\'<div class=&quot;pop-logo vide&quot;>logo a venir</div>\'">'
     : '<div class="pop-logo vide">logo a venir</div>';
   var cats=catsActives(props).map(function(c){return '<span class="cat '+c[0].replace("_","-")+'">'+c[1]+'</span>';}).join("");
-  var head='<div class="fiche-head"><h2>'+(props.nom||"")+'</h2></div>';
   var catsBloc=cats?'<div class="cats">'+cats+'</div>':"";
-  var actions='<div class="actions">'+
-    '<button class="b-mail"><i class="fa fa-envelope"></i> Par mail</button>'+
-    '<button class="b-grand"><i class="fa fa-expand"></i> Agrandir</button></div>';
-  return logo+head+catsBloc+actions+'<div class="fiche">'+renderFiche(props.fiche||"")+'</div>';
+  var head="";
+  if(!pourModal){
+    head='<div class="fiche-head"><h2>'+(props.nom||"")+'</h2><div class="fa-actions">'+
+      '<button class="b-copier" title="Copier"><i class="fa fa-clipboard"></i></button>'+
+      '<button class="b-grand" title="Agrandir"><i class="fa fa-expand"></i></button></div></div>';
+  }
+  return logo+head+catsBloc+'<div class="fiche">'+renderFiche(props.fiche||"")+'</div>';
 }
 
 function chargerFeatures(fc){
   markers.forEach(function(m){map.removeLayer(m);}); markers=[];
   document.getElementById("hint").style.display="none";
+  if(fc.date_maj) document.getElementById("foot-date").textContent="· MàJ données : "+fc.date_maj;
   (fc.features||[]).forEach(function(ft){
     var props=ft.properties||{}, co=ft.geometry.coordinates;
     var m=L.marker([co[1],co[0]],{icon:pin("#A2368F"),title:props.nom});
     m._props=props; m._tag=props.nom;
-    m.bindPopup(construirePopup(props),{maxWidth:300,minWidth:230});
+    m.bindPopup(construirePopup(props,false),{maxWidth:300,minWidth:230});
     markers.push(m);
   });
   appliquerFiltres();
 }
-
 function appliquerFiltres(){
   markers.forEach(function(m){
     var ok = filtresActifs.length===0 || filtresActifs.every(function(k){return m._props[k]==="oui";});
@@ -190,8 +238,6 @@ function appliquerFiltres(){
     if(!ok && map.hasLayer(m)) map.removeLayer(m);
   });
 }
-
-/* filtres UI */
 const filtresEl=document.getElementById("filtres");
 CATS.forEach(function(c){
   var b=document.createElement("button"); b.className="chip"; b.textContent=c[1];
@@ -203,27 +249,41 @@ CATS.forEach(function(c){
   filtresEl.appendChild(b);
 });
 
-/* highlight + boutons popup */
+/* ---- copier ---- */
+function fallbackCopy(t){var ta=document.createElement("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");}catch(e){}document.body.removeChild(ta);}
+function copier(props){
+  var txt=ficheTexte(props.fiche||"");
+  var complet=(props.nom?props.nom+"\n\n":"")+txt+"\n\n"+MENTION;
+  var msg="Vous pouvez coller le contenu dans un courriel ou un message texte avec la mention : "+MENTION;
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(complet).then(function(){toast(msg);}).catch(function(){fallbackCopy(complet);toast(msg);});
+  } else { fallbackCopy(complet); toast(msg); }
+}
+
+/* ---- highlight + boutons popup ---- */
 map.on("popupopen",function(e){
   var src=e.popup._source;
-  markers.forEach(function(m){var el=m._icon;if(!el)return;var s=el.querySelector(".pin");if(!s)return;
-    s.classList.remove("attenue","accentue"); if(m===src)s.classList.add("accentue"); });
+  markers.forEach(function(m){var el=m._icon;if(!el)return;var s=el.querySelector(".pin");if(!s)return;s.classList.remove("attenue","accentue");if(m===src)s.classList.add("accentue");});
   var root=e.popup.getElement();
-  var bg=root.querySelector(".b-grand"); if(bg)bg.addEventListener("click",function(){ouvrirModal(src._tag,construirePopup(src._props));});
-  var bm=root.querySelector(".b-mail"); if(bm)bm.addEventListener("click",function(){
-    var corps=ficheTexte(src._props.fiche||"");
-    window.location.href="mailto:?subject="+encodeURIComponent(src._props.nom||"Association")+"&body="+encodeURIComponent(corps);
-  });
+  var bg=root.querySelector(".b-grand"); if(bg)bg.addEventListener("click",function(){ouvrirModal(src._props);});
+  var bc=root.querySelector(".b-copier"); if(bc)bc.addEventListener("click",function(){copier(src._props);});
 });
 map.on("popupclose",function(){markers.forEach(function(m){var el=m._icon;if(!el)return;var s=el.querySelector(".pin");if(s)s.classList.remove("attenue","accentue");});});
 
-/* modale */
+/* ---- modale ---- */
 const modal=document.getElementById("modal");
-function ouvrirModal(tag,html){document.getElementById("modal-tag").textContent=tag;document.getElementById("modal-fiche").innerHTML='<div class="fiche" style="max-height:none;padding:0">'+html+'</div>';modal.classList.add("ouvert");}
+var modalProps=null;
+function ouvrirModal(props){
+  modalProps=props;
+  document.getElementById("modal-tag").textContent=props.nom||"";
+  document.getElementById("modal-fiche").innerHTML=construirePopup(props,true);
+  modal.classList.add("ouvert");
+}
 document.getElementById("modal-close").addEventListener("click",function(){modal.classList.remove("ouvert");});
+document.getElementById("modal-copier").addEventListener("click",function(){if(modalProps)copier(modalProps);});
 modal.addEventListener("click",function(e){if(e.target===modal)modal.classList.remove("ouvert");});
 
-/* moveTo */
+/* ---- moveTo ---- */
 document.addEventListener("click",function(e){
   var a=e.target.closest('a[href^="app://moveTo?"]'); if(!a)return; e.preventDefault();
   var c=a.getAttribute("href").split("?")[1].split(" ")[0].split(",");
@@ -231,7 +291,7 @@ document.addEventListener("click",function(e){
   if(!isNaN(lat)&&!isNaN(lng)){modal.classList.remove("ouvert");map.closePopup();map.flyTo([lat,lng],14);}
 });
 
-/* zones + fonds */
+/* ---- zones + fond ---- */
 const ZONES={metropole:[[46.7,2.4],6],guyane:[[4.0,-53.0],7],reunion:[[-21.11,55.53],10],antilles:[[15.5,-61.4],8]};
 document.querySelectorAll("#zones button").forEach(function(b){b.addEventListener("click",function(){
   document.querySelectorAll("#zones button").forEach(function(x){x.classList.remove("actif");});b.classList.add("actif");
@@ -243,25 +303,50 @@ btnFond.addEventListener("click",function(){
   else { if(map.hasLayer(fondOSM))map.removeLayer(fondOSM); fondIGN.addTo(map); fondCourant="ign"; btnFond.innerHTML='<i class="fa fa-exchange"></i> Fond IGN'; }
 });
 
+/* ---- guide ---- */
+const guide=document.getElementById("guideOverlay");
+document.getElementById("btn-aide").addEventListener("click",function(){guide.classList.add("open");});
+document.getElementById("guide-close").addEventListener("click",function(){guide.classList.remove("open");});
+guide.addEventListener("click",function(e){if(e.target===guide)guide.classList.remove("open");});
+document.querySelectorAll(".guide-tab").forEach(function(t){t.addEventListener("click",function(){
+  var tab=t.dataset.tab;
+  document.querySelectorAll(".guide-tab").forEach(function(x){x.classList.toggle("active",x===t);});
+  document.querySelectorAll(".guide-tab-content").forEach(function(c){c.classList.toggle("active",c.id==="content-"+tab);});
+});});
 
-/* init : la carte charge TOUJOURS Carte_Obesite.geojson (meme dossier) */
-fetch("Carte_Obesite.geojson",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json();})
-  .then(function(fc){chargerFeatures(fc);})
-  .catch(function(){ document.getElementById("hint").style.display="block"; });
+/* ---- toast (4 s) ---- */
+var toastT;
+function toast(msg){var t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("show");},4000);}
 
-/* service worker : rafraichissement force des qu une nouvelle version est en ligne */
+/* ---- installation PWA (mobile uniquement, modele index.html) ---- */
+var pwaPrompt=null;
+function isMobile(){return /android|iphone|ipad|ipod/i.test(navigator.userAgent) || window.matchMedia("(max-width:768px)").matches;}
+function isIos(){return /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;}
+function isStandalone(){return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;}
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();pwaPrompt=e;if(isMobile() && !isStandalone())document.getElementById("btn-install").style.display="inline-flex";});
+window.addEventListener("load",function(){
+  if(isMobile() && isIos() && !isStandalone())document.getElementById("btn-install").style.display="inline-flex";
+  if(isStandalone())document.getElementById("btn-install").style.display="none";
+});
+document.getElementById("btn-install").addEventListener("click",function(){
+  if(pwaPrompt){pwaPrompt.prompt();pwaPrompt.userChoice.then(function(){pwaPrompt=null;});document.getElementById("btn-install").style.display="none";}
+  else if(isIos()){toast("Sur iPhone/iPad : bouton Partager de Safari, puis « Sur l écran d accueil ».");}
+  else{toast("Menu du navigateur, puis « Ajouter à l écran d accueil ».");}
+});
+
+/* ---- service worker : rafraichissement force ---- */
 if("serviceWorker" in navigator){
   window.addEventListener("load",function(){
     navigator.serviceWorker.register("sw.js").then(function(reg){
-      reg.addEventListener("updatefound",function(){
-        var nw=reg.installing; if(!nw) return;
-        nw.addEventListener("statechange",function(){
-          if(nw.state==="installed" && navigator.serviceWorker.controller){ window.location.reload(); }
-        });
-      });
+      reg.addEventListener("updatefound",function(){var nw=reg.installing;if(!nw)return;nw.addEventListener("statechange",function(){if(nw.state==="installed" && navigator.serviceWorker.controller){window.location.reload();}});});
     }).catch(function(){});
   });
 }
+
+/* ---- init : charge toujours Carte_Obesite.geojson ---- */
+fetch("Carte_Obesite.geojson",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json();})
+  .then(function(fc){chargerFeatures(fc);})
+  .catch(function(){document.getElementById("hint").style.display="block";});
 </script>
 </body>
 </html>
