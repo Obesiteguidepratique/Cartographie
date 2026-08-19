@@ -1,0 +1,20 @@
+{
+ "date_maj": "19/08/2026",
+ "news": [
+  {
+   "date": "19/08/2026",
+   "rubrique": "restaurant",
+   "contenu": "Nouveau restaurant : chez Nini 16430 Champniers\n"
+  },
+  {
+   "date": "16/08/2026",
+   "rubrique": "app",
+   "contenu": "Bienvenue sur **Baria-ressources** ✨ La page évolue régulièrement : retrouvez ici les nouveautés."
+  },
+  {
+   "date": "15/08/2026",
+   "rubrique": "restaurant",
+   "contenu": "Ajout des premiers **restaurants accueillants** pour les opérés 🍴 Partagez vos bonnes adresses via le bouton « Proposer un restaurant »."
+  }
+ ]
+}
