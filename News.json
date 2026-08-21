@@ -1,0 +1,25 @@
+{
+ "date_maj": "21/08/2026",
+ "news": [
+  {
+   "date": "21/08/2026",
+   "rubrique": "restaurant",
+   "contenu": "Nouveau restaurant : <br>\nTran Traiteur 49000 Angers\n"
+  },
+  {
+   "date": "19/08/2026",
+   "rubrique": "restaurant",
+   "contenu": "Nouveaux restaurants : <br>\nchez Nini 16430 Champniers<br>\nA Table !  71260 Saint-Albain<br>\nRomesa - Buffet du Monde\t40220 Tarnos<br>\n\n"
+  },
+  {
+   "date": "16/08/2026",
+   "rubrique": "app",
+   "contenu": "Bienvenue sur **Baria-ressources** ✨ La page évolue régulièrement : retrouvez ici les nouveautés."
+  },
+  {
+   "date": "15/08/2026",
+   "rubrique": "restaurant",
+   "contenu": "Ajout des premiers **restaurants accueillants** pour les opérés 🍴 Partagez vos bonnes adresses via le bouton « Proposer un restaurant »."
+  }
+ ]
+}
