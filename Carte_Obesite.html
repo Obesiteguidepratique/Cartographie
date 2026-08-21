@@ -15,6 +15,9 @@
 <meta property="og:description" content="La cartographie des ressources disponibles pour les opérés bariatriques (Belgique / Canada / France / Suisse)">
 <meta property="og:url" content="https://obesiteguidepratique.github.io/Cartographie/Carte_Obesite.html">
 <meta property="og:image" content="https://obesiteguidepratique.github.io/Cartographie/og-image.png">
+<meta property="og:image:secure_url" content="https://obesiteguidepratique.github.io/Cartographie/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:alt" content="Baria-ressources">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="fr_FR">
@@ -186,6 +189,9 @@
   .kofi-link{display:inline-block;padding:10px 20px;background:#72a4f2;color:#fff;border-radius:12px;font-weight:800;font-size:14px;text-decoration:none;}
   .ap-center{text-align:center;margin-top:14px;}
   .ap-ghost{background:none;border:1.5px solid var(--violet);border-radius:8px;cursor:pointer;font:inherit;font-size:12.5px;color:var(--violet);font-weight:700;padding:6px 14px;margin-top:8px;}
+  .share-row{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin:2px 0 4px;}
+  .share-btn{width:44px;height:44px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:18px;color:#fff;border:0;cursor:pointer;text-decoration:none;}
+  .sh-fb{background:#1877f2;} .sh-wa{background:#25d366;} .sh-li{background:#0a66c2;} .sh-tw{background:#111;} .sh-em{background:#6b7280;} .sh-cp{background:var(--violet);}
   .flotte{display:none;position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:2500;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(20,28,45,.22);padding:14px 16px;max-width:min(420px,92vw);}
   .flotte .f-txt{font-size:13px;color:var(--slate);font-weight:600;margin-bottom:10px;line-height:1.4;}
   .flotte .f-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
@@ -286,6 +292,15 @@
         <p>Elle est gratuite et c&rsquo;est un outil annexe du livre «&nbsp;<a href="https://obesite-guide-pratique.eu" target="_blank" rel="noopener">Obésité guide pratique patients</a>&nbsp;».</p>
         <div class="ap-sep"></div>
         <button class="ap-btn" id="ap-envoyer" type="button">📤 Envoyer cette app à d'autres opérés</button>
+        <div class="share-row">
+          <a class="share-btn sh-fb" id="sh-fb" target="_blank" rel="noopener" title="Facebook"><i class="fa fa-facebook"></i></a>
+          <a class="share-btn sh-wa" id="sh-wa" target="_blank" rel="noopener" title="WhatsApp"><i class="fa fa-whatsapp"></i></a>
+          <a class="share-btn sh-li" id="sh-li" target="_blank" rel="noopener" title="LinkedIn"><i class="fa fa-linkedin"></i></a>
+          <a class="share-btn sh-tw" id="sh-tw" target="_blank" rel="noopener" title="X (Twitter)"><i class="fa fa-twitter"></i></a>
+          <a class="share-btn sh-em" id="sh-em" title="E-mail"><i class="fa fa-envelope"></i></a>
+          <button class="share-btn sh-cp" id="sh-copy" type="button" title="Copier le lien"><i class="fa fa-link"></i></button>
+        </div>
+        <p style="font-size:11.5px;color:var(--muted);margin:0 0 8px;text-align:center;">Instagram : utilisez « 📤 Envoyer » (partage du téléphone) ou « Copier le lien ».</p>
         <a class="ap-link" id="ap-idees" href="mailto:otyrbasbaria@sfr.fr?subject=Une%20idée%20pour%20la%20carte">💬 Vous avez des idées à nous proposer ?</a>
         <a class="ap-link" id="ap-erreur" href="mailto:otyrbasbaria@sfr.fr?subject=Erreur%20dans%20une%20fiche">🐛 Vous avez trouvé une erreur dans une fiche ?</a>
         <div class="ap-center">
@@ -315,7 +330,7 @@
 <div class="flotte" id="install-invite"><div class="f-txt">📲 Installer l'application sur votre téléphone ?</div><div class="f-row"><button class="f-ghost" id="inv-later" type="button">Plus tard</button><button class="f-yes" id="inv-yes" type="button">Oui, installer</button></div></div>
 <div class="flotte" id="kofi-banner"><div class="f-txt">Cette application est gratuite. Si elle vous aide, un café fait toujours plaisir ☕</div><div class="f-row"><button class="f-ghost" id="kofi-close" type="button">Plus tard</button><button class="f-ghost" id="kofi-done" type="button">J'ai soutenu</button><a class="f-kofi" id="kofi-go" href="https://ko-fi.com/obesiteguidepratique" target="_blank" rel="noopener">☕ Soutenir</a></div></div>
 <div class="toast" id="toast"></div>
-<footer><span id="foot-build">Build 48</span> <span id="foot-date"></span></footer>
+<footer><span id="foot-build">Build 50</span> <span id="foot-date"></span></footer>
 
 <script>
 const MENTION="Données obtenues sur le site : https://obesiteguidepratique.github.io/Cartographie/Carte_Obesite.html";
@@ -768,7 +783,8 @@ document.getElementById("kofi-done").addEventListener("click",function(){mstore.
 document.getElementById("kofi-close").addEventListener("click",function(){document.getElementById("kofi-banner").style.display="none";});
 document.getElementById("kofi-go").addEventListener("click",function(){document.getElementById("kofi-banner").style.display="none";});
 /* A propos : envoyer / j ai soutenu */
-document.getElementById("ap-envoyer").addEventListener("click",function(){var url="https://obesiteguidepratique.github.io/Cartographie/Carte_Obesite.html";var msg="Lien copié — collez-le dans un SMS ou un courriel.";if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){toast(msg);}).catch(function(){fallbackCopy(url);toast(msg);});}else{fallbackCopy(url);toast(msg);}});
+document.getElementById("ap-envoyer").addEventListener("click",function(){var url=location.origin+location.pathname;var txt="Baria-ressources \u2014 la cartographie des ressources pour les opérés bariatriques";if(navigator.share){navigator.share({title:"Baria-ressources",text:txt,url:url}).catch(function(){});return;}var msg="Lien copié — collez-le dans un SMS, un courriel ou Instagram.";if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){toast(msg);}).catch(function(){fallbackCopy(url);toast(msg);});}else{fallbackCopy(url);toast(msg);}});
+(function(){var url=location.origin+location.pathname;var txt="Baria-ressources \u2014 la cartographie des ressources pour les opérés bariatriques";var eu=encodeURIComponent(url),et=encodeURIComponent(txt);function S(id,h){var e=document.getElementById(id);if(e)e.href=h;}S("sh-fb","https://www.facebook.com/sharer/sharer.php?u="+eu);S("sh-wa","https://wa.me/?text="+encodeURIComponent(txt+" "+url));S("sh-li","https://www.linkedin.com/sharing/share-offsite/?url="+eu);S("sh-tw","https://twitter.com/intent/tweet?text="+et+"&url="+eu);S("sh-em","mailto:?subject="+encodeURIComponent("Baria-ressources")+"&body="+encodeURIComponent(txt+"\n"+url));var cp=document.getElementById("sh-copy");if(cp)cp.addEventListener("click",function(){var m="Lien copié.";if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){toast(m);}).catch(function(){fallbackCopy(url);toast(m);});}else{fallbackCopy(url);toast(m);}});})();
 document.getElementById("ap-supported").addEventListener("click",function(){mstore.set("kofi_supporter",1);document.getElementById("kofi-banner").style.display="none";toast("Merci beaucoup ! ☕");});
 
 /* ---------- service worker ---------- */
