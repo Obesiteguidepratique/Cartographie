@@ -1,7 +1,7 @@
 /* Service worker Carte Obesite
    Regle projet : nom de cache synchronise avec le numero de Build.
    A chaque mise a jour : incrementer BUILD ici ET le "Build X" du pied de page. */
-const BUILD = 46;
+const BUILD = 48;
 const CACHE = "carte-obesite-v" + BUILD;
 const ASSETS = ["./", "./Carte_Obesite.html", "./Carte_Obesite.geojson", "./News.json",
   "./manifest.json", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/apple-touch-icon.png"];
