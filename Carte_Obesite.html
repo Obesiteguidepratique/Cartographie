@@ -191,7 +191,8 @@
   .ap-ghost{background:none;border:1.5px solid var(--violet);border-radius:8px;cursor:pointer;font:inherit;font-size:12.5px;color:var(--violet);font-weight:700;padding:6px 14px;margin-top:8px;}
   .share-row{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin:2px 0 4px;}
   .share-btn{width:44px;height:44px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:18px;color:#fff;border:0;cursor:pointer;text-decoration:none;}
-  .sh-fb{background:#1877f2;} .sh-wa{background:#25d366;} .sh-li{background:#0a66c2;} .sh-tw{background:#111;} .sh-em{background:#6b7280;} .sh-cp{background:var(--violet);}
+  .sh-fb{background:#1877f2;} .sh-wa{background:#25d366;} .sh-li{background:#0a66c2;} .sh-tw{background:#111;} .sh-em{background:#6b7280;}
+  .guide-tab-content .share-btn, .guide-tab-content .share-btn i{color:#fff;font-weight:400;}
   .flotte{display:none;position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:2500;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(20,28,45,.22);padding:14px 16px;max-width:min(420px,92vw);}
   .flotte .f-txt{font-size:13px;color:var(--slate);font-weight:600;margin-bottom:10px;line-height:1.4;}
   .flotte .f-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
@@ -285,7 +286,7 @@
         <p>Si vous visitez un restaurant, ajoutez votre avis.</p>
         </div>
       </div>
-      <div class="guide-tab-content" id="content-config"><h4>⚙️ Configuration</h4><div id="cfg-install-wrap" style="display:none;margin-bottom:12px;"><button class="ap-btn" id="cfg-install" type="button">📲 Installer l&rsquo;application sur cet appareil</button></div><div id="cfg-assoc"><div id="cfg-toggles"></div><div class="ap-sep"></div></div><div class="cfg-sub">Recherche de ville — pays inclus</div><div id="cfg-pays" class="pays-row"></div><div class="ap-sep"></div><div class="cfg-sub">Nouveautés</div><label class="tgl"><input type="checkbox" id="cfg-news-on"><span>Afficher « Dernières nouveautés au démarrage »</span></label><div style="margin-top:8px;"><button class="ap-btn" id="cfg-news-see" type="button">✨ Voir les nouveautés</button></div><div class="ap-sep"></div><button class="ap-btn" id="cfg-reset" type="button" style="border-color:#f0d0d0;color:#c0392b;">♻️ Réinitialiser l&rsquo;application</button><p style="font-size:11px;color:var(--muted);margin-top:2px;">Déconnecte le service worker, vide le cache et efface les réglages locaux, puis recharge. Vos données en ligne ne sont pas touchées.</p></div>
+      <div class="guide-tab-content" id="content-config"><h4>⚙️ Configuration</h4><div id="cfg-install-wrap" style="display:none;margin-bottom:12px;"><button class="ap-btn" id="cfg-install" type="button">📲 Installer l&rsquo;application sur cet appareil</button></div><div id="cfg-assoc"><div id="cfg-toggles"></div><div class="ap-sep"></div></div><div class="cfg-sub">Recherche de ville — pays inclus</div><div id="cfg-pays" class="pays-row"></div><div class="ap-sep"></div><div class="cfg-sub">Nouveautés</div><label class="tgl"><input type="checkbox" id="cfg-news-on"><span>Afficher « Dernières nouveautés au démarrage »</span></label><div style="margin-top:8px;"><button class="ap-btn" id="cfg-news-see" type="button">✨ Voir les nouveautés</button></div><div class="ap-sep"></div><div class="cfg-sub">🔒 Confidentialité</div><p style="font-size:12.5px;color:#374151;line-height:1.5;margin:0;">Vos données restent sur votre appareil. Aucune information n'est envoyée à un serveur. Nous ne collectons rien.</p><div class="ap-sep"></div><button class="ap-btn" id="cfg-reset" type="button" style="border-color:#f0d0d0;color:#c0392b;">♻️ Réinitialiser l&rsquo;application</button><p style="font-size:11px;color:var(--muted);margin-top:2px;">Déconnecte le service worker, vide le cache et efface les réglages locaux, puis recharge. Vos données en ligne ne sont pas touchées.</p></div>
       <div class="guide-tab-content" id="content-apropos">
         <h4>ℹ️ À propos</h4>
         <p>Ceci est une application de patients pour des patients ou des professionnels de santé qui souhaitent partager des ressources utiles.</p>
@@ -298,9 +299,8 @@
           <a class="share-btn sh-li" id="sh-li" target="_blank" rel="noopener" title="LinkedIn"><i class="fa fa-linkedin"></i></a>
           <a class="share-btn sh-tw" id="sh-tw" target="_blank" rel="noopener" title="X (Twitter)"><i class="fa fa-twitter"></i></a>
           <a class="share-btn sh-em" id="sh-em" title="E-mail"><i class="fa fa-envelope"></i></a>
-          <button class="share-btn sh-cp" id="sh-copy" type="button" title="Copier le lien"><i class="fa fa-link"></i></button>
         </div>
-        <p style="font-size:11.5px;color:var(--muted);margin:0 0 8px;text-align:center;">Instagram : utilisez « 📤 Envoyer » (partage du téléphone) ou « Copier le lien ».</p>
+        <p style="font-size:11.5px;color:var(--muted);margin:0 0 8px;text-align:center;">Instagram : utilisez « 📤 Envoyer » (partage du téléphone).</p>
         <a class="ap-link" id="ap-idees" href="mailto:otyrbasbaria@sfr.fr?subject=Une%20idée%20pour%20la%20carte">💬 Vous avez des idées à nous proposer ?</a>
         <a class="ap-link" id="ap-erreur" href="mailto:otyrbasbaria@sfr.fr?subject=Erreur%20dans%20une%20fiche">🐛 Vous avez trouvé une erreur dans une fiche ?</a>
         <div class="ap-center">
@@ -330,7 +330,7 @@
 <div class="flotte" id="install-invite"><div class="f-txt">📲 Installer l'application sur votre téléphone ?</div><div class="f-row"><button class="f-ghost" id="inv-later" type="button">Plus tard</button><button class="f-yes" id="inv-yes" type="button">Oui, installer</button></div></div>
 <div class="flotte" id="kofi-banner"><div class="f-txt">Cette application est gratuite. Si elle vous aide, un café fait toujours plaisir ☕</div><div class="f-row"><button class="f-ghost" id="kofi-close" type="button">Plus tard</button><button class="f-ghost" id="kofi-done" type="button">J'ai soutenu</button><a class="f-kofi" id="kofi-go" href="https://ko-fi.com/obesiteguidepratique" target="_blank" rel="noopener">☕ Soutenir</a></div></div>
 <div class="toast" id="toast"></div>
-<footer><span id="foot-build">Build 50</span> <span id="foot-date"></span></footer>
+<footer><span id="foot-build">Build 51</span> <span id="foot-date"></span></footer>
 
 <script>
 const MENTION="Données obtenues sur le site : https://obesiteguidepratique.github.io/Cartographie/Carte_Obesite.html";
@@ -784,7 +784,7 @@ document.getElementById("kofi-close").addEventListener("click",function(){docume
 document.getElementById("kofi-go").addEventListener("click",function(){document.getElementById("kofi-banner").style.display="none";});
 /* A propos : envoyer / j ai soutenu */
 document.getElementById("ap-envoyer").addEventListener("click",function(){var url=location.origin+location.pathname;var txt="Baria-ressources \u2014 la cartographie des ressources pour les opérés bariatriques";if(navigator.share){navigator.share({title:"Baria-ressources",text:txt,url:url}).catch(function(){});return;}var msg="Lien copié — collez-le dans un SMS, un courriel ou Instagram.";if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){toast(msg);}).catch(function(){fallbackCopy(url);toast(msg);});}else{fallbackCopy(url);toast(msg);}});
-(function(){var url=location.origin+location.pathname;var txt="Baria-ressources \u2014 la cartographie des ressources pour les opérés bariatriques";var eu=encodeURIComponent(url),et=encodeURIComponent(txt);function S(id,h){var e=document.getElementById(id);if(e)e.href=h;}S("sh-fb","https://www.facebook.com/sharer/sharer.php?u="+eu);S("sh-wa","https://wa.me/?text="+encodeURIComponent(txt+" "+url));S("sh-li","https://www.linkedin.com/sharing/share-offsite/?url="+eu);S("sh-tw","https://twitter.com/intent/tweet?text="+et+"&url="+eu);S("sh-em","mailto:?subject="+encodeURIComponent("Baria-ressources")+"&body="+encodeURIComponent(txt+"\n"+url));var cp=document.getElementById("sh-copy");if(cp)cp.addEventListener("click",function(){var m="Lien copié.";if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){toast(m);}).catch(function(){fallbackCopy(url);toast(m);});}else{fallbackCopy(url);toast(m);}});})();
+(function(){var url=location.origin+location.pathname;var txt="Baria-ressources \u2014 la cartographie des ressources pour les opérés bariatriques";var eu=encodeURIComponent(url),et=encodeURIComponent(txt);function S(id,h){var e=document.getElementById(id);if(e)e.href=h;}S("sh-fb","https://www.facebook.com/sharer/sharer.php?u="+eu);S("sh-wa","https://wa.me/?text="+encodeURIComponent(txt+" "+url));S("sh-li","https://www.linkedin.com/sharing/share-offsite/?url="+eu);S("sh-tw","https://twitter.com/intent/tweet?text="+et+"&url="+eu);S("sh-em","mailto:?subject="+encodeURIComponent("Baria-ressources")+"&body="+encodeURIComponent(txt+"\n"+url));})();
 document.getElementById("ap-supported").addEventListener("click",function(){mstore.set("kofi_supporter",1);document.getElementById("kofi-banner").style.display="none";toast("Merci beaucoup ! ☕");});
 
 /* ---------- service worker ---------- */

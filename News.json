@@ -1,15 +1,25 @@
 {
- "date_maj": "21/08/2026",
+ "date_maj": "22/08/2026",
  "news": [
+  {
+   "date": "22/08/2026",
+   "rubrique": "app",
+   "contenu": "ℹ️ À propos<br>\nBoutons de partage sur les réseaux sociaux"
+  },
+  {
+   "date": "22/08/2026",
+   "rubrique": "restaurant",
+   "contenu": "Le Punjab 49100 Angers\n"
+  },
   {
    "date": "21/08/2026",
    "rubrique": "restaurant",
-   "contenu": "Nouveau restaurant : <br>\nTran Traiteur 49000 Angers\n"
+   "contenu": "Tran Traiteur 49000 Angers\n"
   },
   {
    "date": "19/08/2026",
    "rubrique": "restaurant",
-   "contenu": "Nouveaux restaurants : <br>\nchez Nini 16430 Champniers<br>\nA Table !  71260 Saint-Albain<br>\nRomesa - Buffet du Monde\t40220 Tarnos<br>\n\n"
+   "contenu": "chez Nini 16430 Champniers<br>\nA Table !  71260 Saint-Albain<br>\nRomesa - Buffet du Monde\t40220 Tarnos<br>\n\n"
   },
   {
    "date": "16/08/2026",
