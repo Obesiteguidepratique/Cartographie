@@ -1,6 +1,6 @@
 {
  "type": "FeatureCollection",
- "date_maj": "22/08/2026",
+ "date_maj": "23/08/2026",
  "features": [
   {
    "type": "Feature",
@@ -2662,6 +2662,40 @@
     "nom": "LE PUNJAB",
     "logo": "054PunjabAngers.png",
     "fiche": "| :fa-info:#A2368F:|**Identification**|\n| ---- | ---- |\n| :fa-map-o::#A2368F:|12 Rue Pocquet de Livonnières<br>49100 Angers <br>France|\n| :fa-book::#A2368F:|Restaurant indien et pakistanais|\n| :fa-chain::#A2368F:|[Site Web](https://lepunjab-restaurant-angers.fr/fr)|\n| :fa-instagram::#A2368F:|[Instagram](https://www.instagram.com/le.punjab/)|\n| :fa-refresh::#A2368F:|Fiche Maj le 26/08/22|\n\n** :fa-newspaper-o: Commentaires** <br>\nIls tolèrent que sur une table de 3 que l’on partage 2 plats<br>Laureën",
+    "zone": "metropole"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.4695292389450207,
+     48.6363277079527
+    ]
+   },
+   "properties": {
+    "type": "restaurant",
+    "nom": "LA STALLA",
+    "logo": "054Lastalla.png",
+    "fiche": "| :fa-info:#A2368F:|**Identification**|\n| ---- | ---- |\n| :fa-map-o::#A2368F:|48 Rue du Port<br>22430 Erquy <br>France|\n| :fa-book::#A2368F:|Cuisine française et italienne|\n| :fa-chain::#A2368F:|[Site Web](https://www.restaurant-lastalla.fr/)|\n| :fa-facebook-official::#A2368F:|[FaceBook](https://www.facebook.com/people/La-Stalla/100063476291767/)|\n| :fa-refresh::#A2368F:|Fiche Maj le 26/08/23|\n\n** :fa-newspaper-o: Commentaires** <br>\nS'adapte aux petits estomacs.<br>Malika",
+    "zone": "metropole"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -2.511600516191293,
+     47.34789372606852
+    ]
+   },
+   "properties": {
+    "type": "restaurant",
+    "nom": "LE BISTROT LA TURBALLE",
+    "logo": "054BistroLaturballe.JPG",
+    "fiche": "| :fa-info:#A2368F:|**Identification**|\n| ---- | ---- |\n| :fa-map-o::#A2368F:|6 quai St Pierre,<br>44420 La Turballe <br>France|\n| :fa-book::#A2368F:|Bar — Brasserie|\n| :fa-chain::#A2368F:|[Site Web](https://www.lebistrot-laturballe.fr/)|\n| :fa-facebook-official::#A2368F:|[FaceBook](https://www.facebook.com/lebistrotlaturballe/)|\n| :fa-instagram::#A2368F:|[Instagram](https://www.instagram.com/le_bistrot_la_turballe)|\n| :fa-refresh::#A2368F:|Fiche Maj le 26/08/23|\n\n** :fa-newspaper-o: Commentaires** <br>\nS'adapte aux petits estomacs.<br>Malika",
     "zone": "metropole"
    }
   }

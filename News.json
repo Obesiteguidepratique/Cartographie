@@ -1,6 +1,11 @@
 {
- "date_maj": "22/08/2026",
+ "date_maj": "23/08/2026",
  "news": [
+  {
+   "date": "23/08/2026",
+   "rubrique": "restaurant",
+   "contenu": "La Stalla\t22430 Erquy<br>\nLe Bistrot  44420 La Turballe\n"
+  },
   {
    "date": "22/08/2026",
    "rubrique": "app",
