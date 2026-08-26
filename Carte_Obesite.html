@@ -127,6 +127,7 @@
   .cat.bariatrique{background:#b45309;} .cat.adultes{background:#0e8a7d;} .cat.adolescents{background:#2563eb;}
   .cat.enfants{background:#7c3aed;} .cat.pairs_inclus{background:#A2368F;} .cat.pros_inclus{background:#475569;}
   .fiche{padding:8px 14px 14px;max-height:250px;overflow:auto;line-height:1.45;font-size:13px;color:#374151;}
+  .fiche.fiche-resto{max-height:56vh;}
   .fiche table{border-collapse:collapse;width:100%;margin:6px 0;font-size:12px;}
   .fiche td,.fiche th{border:1px solid var(--line);padding:5px 7px;vertical-align:top;}
   .fiche tbody tr:nth-child(even){background:#f3f3f7;}
@@ -330,7 +331,7 @@
 <div class="flotte" id="install-invite"><div class="f-txt">📲 Installer l'application sur votre téléphone ?</div><div class="f-row"><button class="f-ghost" id="inv-later" type="button">Plus tard</button><button class="f-yes" id="inv-yes" type="button">Oui, installer</button></div></div>
 <div class="flotte" id="kofi-banner"><div class="f-txt">Cette application est gratuite. Si elle vous aide, un café fait toujours plaisir ☕</div><div class="f-row"><button class="f-ghost" id="kofi-close" type="button">Plus tard</button><button class="f-ghost" id="kofi-done" type="button">J'ai soutenu</button><a class="f-kofi" id="kofi-go" href="https://ko-fi.com/obesiteguidepratique" target="_blank" rel="noopener">☕ Soutenir</a></div></div>
 <div class="toast" id="toast"></div>
-<footer><span id="foot-build">Build 51</span> <span id="foot-date"></span></footer>
+<footer><span id="foot-build">Build 57</span> <span id="foot-date"></span></footer>
 
 <script>
 const MENTION="Données obtenues sur le site : https://obesiteguidepratique.github.io/Cartographie/Carte_Obesite.html";
@@ -430,8 +431,17 @@ var clusters={};["association","pair_aidant","restaurant"].forEach(function(t){v
    elle survit au reclustering declenche par le recadrage B2. */
 function ouvrirFiche(m){
   if(!m||!m._props) return;
-  var pop=L.popup({maxWidth:300,minWidth:230,autoPan:true,autoPanPaddingTopLeft:L.point(20,74),autoPanPaddingBottomRight:L.point(20,24)})
-    .setLatLng(m.getLatLng())
+  var anchor=m.getLatLng(); var zFinal=map.getZoom();
+  /* multi-sites : ancrer la fiche au point le plus au nord pour qu'elle s'ouvre au-dessus de tous les sites (sans en recouvrir aucun) */
+  if(m._multi&&m._sites&&m._sites.length){
+    var north=m._sites[0]; for(var i=1;i<m._sites.length;i++){ if(m._sites[i][0]>north[0]) north=m._sites[i]; } anchor=L.latLng(north[0],north[1]);
+    var bons=m._sites.filter(function(s){return bornesOK(s[0],s[1]);});
+    if(bons.length>1){ try{ zFinal=Math.min(13,map.getBoundsZoom(L.latLngBounds(bons))); }catch(e){} }
+  }
+  /* pointe de la fiche toujours au-dessus du sommet de la puce : decalage = hauteur de puce au zoom final */
+  var pinH=Math.round(tailleParZoom(zFinal)*1.33);
+  var pop=L.popup({maxWidth:300,minWidth:230,offset:L.point(0,-(pinH+6)),autoPan:true,autoPanPaddingTopLeft:L.point(20,74),autoPanPaddingBottomRight:L.point(20,24)})
+    .setLatLng(anchor)
     .setContent(construirePopup(m._props,false));
   pop._src=m;
   map.openPopup(pop);
@@ -463,7 +473,7 @@ function construirePopup(p,pourModal){
     head='<div class="fiche-head"><h2>'+esc(p.nom||"")+'</h2><div class="fa-actions"><button class="b-copier" title="Copier"><i class="fa fa-clipboard"></i></button><button class="b-grand" title="Agrandir"><i class="fa fa-expand"></i></button></div></div>';
   }
   var comment='<a class="fiche-comment" href="mailto:otyrbasbaria@sfr.fr?subject='+encodeURIComponent(p.nom||"")+'"><i class="fa fa-envelope-o"></i> Proposer un commentaire</a>';
-  return logoHtml(p)+head+catsBloc+'<div class="fiche">'+renderFiche(p.fiche||"")+'</div>'+comment;
+  return logoHtml(p)+head+catsBloc+'<div class="fiche'+(p.type==="restaurant"?" fiche-resto":"")+'">'+renderFiche(p.fiche||"")+'</div>'+comment;
 }
 
 function hchaine(str){var h=5381,i=str.length;while(i)h=(h*33)^str.charCodeAt(--i);return (h>>>0).toString(36);}
@@ -572,22 +582,28 @@ function copier(p){
 }
 
 /* ---------- interaction B2 (clic multi-sites) ---------- */
-function nettoyerSec(){ secMarkers.forEach(function(m){map.removeLayer(m);}); secMarkers=[]; }
+var secLine=null;
+function nettoyerSec(){ secMarkers.forEach(function(m){map.removeLayer(m);}); secMarkers=[]; if(secLine){map.removeLayer(secLine);secLine=null;} }
 map.on("popupopen",function(e){
   var src=e.popup._src||e.popup._source; nettoyerSec();
+  var root=e.popup.getElement();
   try{
   if(src._multi){
     var sz=Math.max(18,tailleParZoom(map.getZoom())-4);
-    src._sites.forEach(function(s){ if(bornesOK(s[0],s[1])){var mk=L.marker(s,{icon:secPin(sz),interactive:false}); mk.addTo(map); secMarkers.push(mk);} });
+    var bons=src._sites.filter(function(s){return bornesOK(s[0],s[1]);});
+    bons.forEach(function(s){var mk=L.marker(s,{icon:secPin(sz),interactive:false}); mk.addTo(map); secMarkers.push(mk);});
     var nom=src._props.nom;
     markers.forEach(function(m){ var dif=m._props.nom!==nom; m._dim=dif; if(m._icon)m._icon.style.opacity=dif?.28:1; });
-    var bons=src._sites.filter(function(s){return bornesOK(s[0],s[1]);});
-    if(bons.length) map.fitBounds(L.latLngBounds(bons),{paddingTopLeft:L.point(30,300),paddingBottomRight:L.point(30,50),maxZoom:13,animate:true});
+    if(bons.length){
+      /* padding haut = hauteur reelle de la fiche : tous les points restent visibles en-dessous, sur les ecrans courants */
+      var ph=(root&&root.offsetHeight)||320; var mh=map.getSize().y;
+      var topPad=Math.max(210,Math.min(ph+46,mh-130));
+      map.fitBounds(L.latLngBounds(bons),{paddingTopLeft:L.point(30,topPad),paddingBottomRight:L.point(30,50),maxZoom:13,animate:true});
+    }
   }
   }catch(_){}
-  var root=e.popup.getElement();
-  var bg=root.querySelector(".b-grand"); if(bg)bg.addEventListener("click",function(){ouvrirModal(src._props);});
-  var bc=root.querySelector(".b-copier"); if(bc)bc.addEventListener("click",function(){copier(src._props);});
+  var bg=root&&root.querySelector(".b-grand"); if(bg)bg.addEventListener("click",function(){ouvrirModal(src._props);});
+  var bc=root&&root.querySelector(".b-copier"); if(bc)bc.addEventListener("click",function(){copier(src._props);});
 });
 map.on("popupclose",function(){ nettoyerSec(); markers.forEach(function(m){m._dim=false; if(m._icon)m._icon.style.opacity=1;}); });
 

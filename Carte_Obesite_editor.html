@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carte Obésité — Éditeur</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.0/marked.min.js"></script>
+<style>
+  :root{--slate:#2b3242;--slate-2:#3a4256;--ink:#1c2230;--violet:#A2368F;--violet-soft:#f7ecf5;--teal:#0e8a7d;--paper:#f6f7f9;--line:#e3e6ec;--muted:#6b7280;--ok:#0e8a7d;--no:#c0392b;}
+  *{box-sizing:border-box;} html,body{height:100%;margin:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--paper);display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+  header{background:var(--slate);color:#fff;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  header .brand{display:flex;align-items:center;gap:10px;} header h1{font-size:14px;margin:0;font-weight:600;}
+  header .dot{width:24px;height:24px;border-radius:6px;background:var(--violet);display:grid;place-items:center;} header .dot svg{width:14px;height:14px;}
+  .htools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+  .htools button{border:0;cursor:pointer;font:inherit;font-size:12px;font-weight:600;padding:7px 12px;border-radius:7px;display:inline-flex;align-items:center;gap:6px;}
+  .b-save{background:var(--violet);color:#fff;} .b-ghost{background:var(--slate-2);color:#e7eaf1;}
+  .b-mode{background:transparent;color:#c7cdda;border:1px solid rgba(255,255,255,.25)!important;} .b-mode.on{background:#fff;color:var(--ink);}
+  .b-type{background:transparent;color:#f3f4f7;border:1px solid rgba(255,255,255,.4)!important;} .b-type.on{background:#fff;color:var(--ink);}
+  .hsep{width:1px;height:20px;background:rgba(255,255,255,.28);display:inline-block;}
+  header.t-asso{background:var(--violet);} header.t-pair{background:var(--teal);} header.t-resto{background:#b5722a;}
+  header.t-asso .dot,header.t-pair .dot,header.t-resto .dot{background:rgba(255,255,255,.2);}
+  header .b-save{box-shadow:inset 0 0 0 1px rgba(255,255,255,.4);}
+  #maj-label{font-size:11px;color:#c7cdda;align-self:center;}
+  .layout{flex:1;display:flex;min-height:0;}
+  aside{width:250px;border-right:1px solid var(--line);background:#fff;display:flex;flex-direction:column;min-height:0;}
+  .search{padding:10px;border-bottom:1px solid var(--line);} .search input{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:inherit;font-size:13px;}
+  .liste{flex:1;overflow:auto;}
+  .item{padding:9px 12px;border-bottom:1px solid #f0f1f4;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:8px;}
+  .item:hover{background:var(--paper);} .item.sel{background:var(--violet-soft);font-weight:600;}
+  .item .pastille{width:7px;height:7px;border-radius:50%;background:var(--ok);flex:0 0 auto;} .item.inactif .pastille{background:#c9ccd2;} .item.inactif{color:var(--muted);}
+  .add{padding:10px;border-top:1px solid var(--line);} .add button{width:100%;background:var(--paper);border:1px dashed var(--line);border-radius:8px;padding:9px;font:inherit;font-weight:600;color:var(--slate);cursor:pointer;}
+  main{flex:1;overflow:auto;padding:18px 22px;min-height:0;}
+  .navbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+  .navbar button{border:1px solid var(--line);background:#fff;border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:15px;color:var(--slate);}
+  .navbar .pos{font-size:12px;color:var(--muted);}
+  .navbar .del{margin-left:auto;background:#fff;border:1px solid #f0d0d0;color:var(--no);border-radius:8px;padding:0 12px;height:34px;cursor:pointer;font:inherit;font-weight:600;font-size:12px;}
+  .champ{margin-bottom:14px;} .champ label{display:block;font-size:11px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:var(--slate);margin-bottom:5px;}
+  .champ input[type=text],.champ textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 11px;font:inherit;font-size:13px;}
+  .champ textarea{resize:vertical;line-height:1.5;} .champ textarea.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;min-height:240px;}
+  .nom-row{display:flex;gap:8px;} .nom-row input{flex:1;}
+  .btn-maj{border:1px solid var(--line);background:#fff;border-radius:8px;padding:0 12px;font:inherit;font-weight:700;font-size:12px;cursor:pointer;color:var(--slate);}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .geo{display:flex;gap:8px;align-items:end;margin-bottom:14px;}
+  .geo .champ{flex:1;margin:0;} .geo button{border:0;background:var(--teal);color:#fff;border-radius:8px;padding:9px 13px;font:inherit;font-weight:600;font-size:12px;cursor:pointer;white-space:nowrap;height:38px;}
+  .cats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  .tri{border:1px solid var(--line);border-radius:9px;padding:8px 10px;} .tri .t-lbl{font-size:12px;font-weight:600;margin-bottom:6px;}
+  .tri .opts{display:flex;gap:4px;} .tri .opts button{flex:1;border:1px solid var(--line);background:#fff;border-radius:6px;padding:5px;font:inherit;font-size:11px;font-weight:600;cursor:pointer;color:var(--muted);}
+  .tri .opts button.oui.on{background:var(--ok);color:#fff;border-color:var(--ok);} .tri .opts button.non.on{background:var(--no);color:#fff;border-color:var(--no);} .tri .opts button.vide.on{background:var(--slate);color:#fff;border-color:var(--slate);}
+  .preview{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fff;font-size:13px;line-height:1.45;max-height:360px;overflow:auto;}
+  .preview table{border-collapse:collapse;width:100%;font-size:12px;margin:6px 0;} .preview td,.preview th{border:1px solid var(--line);padding:5px 7px;} .preview td:first-child{text-align:center;width:22px;} .preview a{color:var(--teal);}
+  .preview details{margin:8px 0;border:1px solid var(--line);border-radius:8px;} .preview summary{cursor:pointer;font-weight:700;padding:6px 9px;background:var(--violet-soft);}
+  .preview .adresse{margin:2px 0;} .preview .adr-titre{font-weight:700;margin:8px 0 3px;}
+  .sect-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:var(--muted);margin:18px 0 8px;}
+  .import{display:none;} body.mode-import .edit{display:none;} body.mode-import .import{display:block;}
+  .imp-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .imp-src textarea{width:100%;min-height:420px;border:1px solid var(--line);border-radius:8px;padding:11px;font:inherit;font-size:13px;}
+  .imp-fields{max-height:480px;overflow:auto;} .imp-field{border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-bottom:8px;}
+  .imp-field .fh{display:flex;justify-content:space-between;gap:8px;margin-bottom:5px;} .imp-field .name{font-size:12px;font-weight:600;color:var(--slate);}
+  .imp-field .fh button{border:1px solid var(--violet);background:var(--violet-soft);color:var(--violet);border-radius:6px;font:inherit;font-size:11px;font-weight:600;padding:4px 8px;cursor:pointer;}
+  .imp-field textarea{width:100%;min-height:34px;border:1px solid var(--line);border-radius:6px;padding:6px 8px;font:inherit;font-size:12px;}
+  .imp-actions{margin-top:14px;} .imp-actions .inject{background:var(--violet);color:#fff;border:0;border-radius:8px;padding:11px 20px;font:inherit;font-weight:700;cursor:pointer;}
+  .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--slate);color:#fff;padding:10px 18px;border-radius:9px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:100;} .toast.show{opacity:1;}
+  @media (max-width:820px){aside{width:190px;} .grid2,.cats,.imp-grid{grid-template-columns:1fr;}}
+  .champ select{width:100%;padding:8px 9px;border:1px solid #d5d8e0;border-radius:8px;font:inherit;font-size:13px;background:#fff;color:#1f2430;cursor:pointer;}
+  #news-editor{position:fixed;inset:0;z-index:2000;background:#f4f5f8;display:none;flex-direction:column;}
+  #news-editor.on{display:flex;}
+  .ne-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#5b3a8a;color:#fff;padding:12px 16px;flex-wrap:wrap;}
+  .ne-title{font-weight:800;font-size:16px;}
+  .ne-tools{display:flex;gap:8px;flex-wrap:wrap;}
+  .ne-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:8px;padding:8px 12px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;}
+  .ne-btn.ne-save{background:#fff;color:#5b3a8a;border-color:#fff;}
+  .ne-body{flex:1;display:flex;min-height:0;}
+  .ne-list-wrap{width:280px;border-right:1px solid var(--line,#e2e4ea);display:flex;flex-direction:column;background:#fff;min-height:0;}
+  .ne-add{margin:10px;padding:9px;border:1px dashed #b9a0dd;background:#f6f1fc;color:#5b3a8a;border-radius:8px;font-weight:700;cursor:pointer;}
+  .ne-list{flex:1;overflow:auto;}
+  .ne-item{padding:9px 12px;border-bottom:1px solid var(--line,#eee);cursor:pointer;}
+  .ne-item:hover{background:#f6f1fc;} .ne-item.sel{background:#efe6fb;}
+  .ne-i-meta{font-size:11px;color:#7a6aa0;font-weight:700;} .ne-i-txt{font-size:12.5px;color:#333;margin-top:2px;}
+  .ne-form{flex:1;overflow:auto;padding:16px 20px;display:flex;flex-direction:column;gap:12px;min-height:0;}
+  .ne-form label{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:700;color:#444;}
+  .ne-form input,.ne-form select,.ne-form textarea{font:inherit;font-size:13px;padding:8px 9px;border:1px solid #d5d8e0;border-radius:8px;background:#fff;}
+  .ne-form textarea{min-height:120px;resize:vertical;}
+  .ne-row{display:flex;gap:12px;} .ne-row label{flex:1;}
+  .ne-prev-lab{font-size:12px;font-weight:700;color:#444;}
+  .ne-prev{border:1px solid #e2e4ea;border-radius:8px;padding:12px;background:#fff;min-height:60px;font-size:13.5px;line-height:1.5;}
+  .ne-del{align-self:flex-start;background:#fff;border:1px solid #f0d0d0;color:#c0392b;border-radius:8px;padding:8px 12px;font-weight:700;cursor:pointer;}
+  @media(max-width:760px){.ne-body{flex-direction:column;}.ne-list-wrap{width:auto;max-height:35vh;border-right:0;border-bottom:1px solid var(--line,#eee);}}
+</style>
+</head>
+<body class="mode-edit">
+<header>
+  <div class="brand"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></span><div><h1 id="ed-titre">Éditeur des associations</h1><div style="font-size:11px;color:#aeb6c6;margin-top:1px;">Build 19</div></div></div>
+  <div class="htools">
+    <button class="b-type on" id="t-asso" type="button">Associations</button>
+    <button class="b-type" id="t-pair" type="button">Pair-aidants</button>
+    <button class="b-type" id="t-resto" type="button">Restaurants</button>
+    <button class="b-type" id="t-news" type="button">Nouveautés</button>
+    <span class="hsep"></span>
+    <button class="b-mode on" id="m-edit" type="button">Édition</button>
+    <button class="b-mode" id="m-import" type="button">Import</button>
+    <span id="maj-label"></span>
+    <input type="file" id="file" accept=".geojson,.json" style="display:none">
+    <button class="b-ghost" id="b-open" type="button"><i class="fa fa-folder-open"></i> Charger</button>
+    <button class="b-save" id="b-save" type="button"><i class="fa fa-download"></i> Sauvegarder</button>
+  </div>
+</header>
+<div class="layout">
+  <aside>
+    <div class="search"><input type="text" id="q" placeholder="Rechercher..."></div>
+    <div class="liste" id="liste"></div>
+    <div class="add"><button id="b-add"><i class="fa fa-plus"></i> Ajouter</button></div>
+  </aside>
+  <main>
+    <div id="missing" style="display:none;background:#fdecea;border:1px solid #f5c6c2;color:#a3352b;border-radius:10px;padding:14px 16px;margin-bottom:16px;font-size:13px;line-height:1.5;"><b>Carte_Obesite.geojson introuvable</b> dans ce répertoire.<br>Placez le fichier à côté de cette page (et ouvrez via https ou un serveur local), ou utilisez le bouton <b>« Charger »</b> pour ouvrir un fichier manuellement.</div>
+    <div id="brouillon" style="display:none;background:#fff8e1;border:1px solid #f0d98a;color:#7a5b00;border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;line-height:1.5;"><b>Brouillon récupéré</b> — des modifications non sauvegardées d'une session précédente ont été retrouvées.<div style="margin-top:8px;display:flex;gap:8px;"><button id="br-restore" style="background:var(--violet);color:#fff;border:0;border-radius:7px;padding:6px 12px;font:inherit;font-weight:600;cursor:pointer;">Restaurer</button><button id="br-ignore" style="background:#fff;border:1px solid var(--line);border-radius:7px;padding:6px 12px;font:inherit;font-weight:600;cursor:pointer;">Ignorer</button></div></div>
+    <div class="edit">
+      <div class="navbar"><button id="prev">&lsaquo;</button><button id="next">&rsaquo;</button><span class="pos" id="pos"></span><button class="del" id="b-del"><i class="fa fa-trash"></i> Supprimer</button></div>
+      <div class="champ"><label id="lbl-nom">Nom de l&rsquo;association</label><div class="nom-row"><input type="text" id="f-nom"><button class="btn-maj" id="b-maj" title="Mettre en majuscules">MAJ</button></div></div>
+      <div class="champ"><label>Logo (fichier pict/ ou texte court, vide = nom)</label><input type="text" id="f-logo" placeholder="ola.png / P-V! / (vide)"><div id="logo-warn" style="display:none;font-size:11.5px;color:#c0392b;margin-top:3px;">⚠️ Nom d'image sans extension (.png, .jpg, .jpeg…) ?</div></div>
+      <div class="geo">
+        <div class="champ"><label>Adresse à géocoder (lieu public)</label><input type="text" id="f-adr-geo" placeholder="1 rue ..., 75000 Paris"></div>
+        <button id="b-geo"><i class="fa fa-map-marker"></i> Trouver</button>
+      </div>
+      <div class="grid2"><div class="champ"><label>Longitude</label><input type="text" id="f-lng"></div><div class="champ"><label>Latitude</label><input type="text" id="f-lat"></div></div>
+      <div class="champ"><label>Zone</label><select id="f-zone"><option value="metropole">Métropole</option><option value="guyane">Guyane</option><option value="reunion">La Réunion</option><option value="antilles">Antilles</option><option value="suisse">Suisse romande</option><option value="belgique">Belgique</option><option value="canada">Canada</option></select></div>
+      <div id="cases-sect">
+      <div class="sect-title">Cases (vide = non exportée)</div>
+      <div class="cats" id="cats"></div>
+      </div>
+      <div class="sect-title">Fiche (Markdown / syntaxe icônes)</div>
+      <div class="grid2"><div class="champ"><label>Source</label><textarea class="mono" id="f-fiche"></textarea></div><div class="champ"><label>Aperçu</label><div class="preview" id="preview"></div></div></div>
+    </div>
+    <div class="import">
+      <div class="sect-title">Import par bloc — collez le bloc complet (en-tête + === + corps), puis importez</div>
+      <textarea id="imp-bloc" style="width:100%;min-height:440px;border:1px solid var(--line);border-radius:8px;padding:11px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;line-height:1.5;" placeholder="Nom de l&#39;association :[...]&lt;br&gt;&#10;Longitude : [...]&lt;br&gt;&#10;Latitude : [...]&lt;br&gt;&#10;Logo : [...]&lt;br&gt;&#10;Champs Bariatrique : [...]&lt;br&gt;&#10;...&#10;===&#10;| :fa-info:#A2368F:|**Identification**|&#10;... (corps de la fiche)"></textarea>
+      <div class="imp-actions"><button class="inject" id="b-importbloc"><i class="fa fa-download"></i> Importer le bloc (nouvelle association)</button></div>
+    </div>
+  </main>
+<div id="news-editor">
+  <div class="ne-bar">
+    <div class="ne-title">🗞️ Éditeur des nouveautés</div>
+    <div class="ne-tools">
+      <label class="ne-btn">📂 Charger News.json<input type="file" id="ne-load" accept=".json,application/json" hidden></label>
+      <button class="ne-btn ne-save" id="ne-save" type="button">💾 Sauvegarder News.json</button>
+      <button class="ne-btn" id="ne-close" type="button">Fermer</button>
+    </div>
+  </div>
+  <div class="ne-body">
+    <div class="ne-list-wrap">
+      <button class="ne-add" id="ne-add" type="button">+ Nouvelle nouveauté</button>
+      <div class="ne-list" id="ne-list"></div>
+    </div>
+    <div class="ne-form">
+      <div class="ne-row">
+        <label>Date (jj/mm/aaaa)<input type="text" id="ne-date" placeholder="16/08/2026"></label>
+        <label>Rubrique<select id="ne-rub"><option value="app">Nouvelles fonctions</option><option value="restaurant">Restaurants</option><option value="association">Associations</option><option value="pair_aidant">Pair-aidants</option></select></label>
+      </div>
+      <label>Contenu (Markdown : **gras**, *italique*, [lien](url), emoji)<textarea id="ne-contenu" class="mono"></textarea></label>
+      <div class="ne-prev-lab">Aperçu</div>
+      <div class="ne-prev" id="ne-prev"></div>
+      <button class="ne-del" id="ne-del" type="button">🗑 Supprimer cette nouveauté</button>
+    </div>
+  </div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const store={get:function(k){try{return JSON.parse(localStorage.getItem("cobed2."+k));}catch(e){return null;}},set:function(k,v){try{localStorage.setItem("cobed2."+k,JSON.stringify(v));}catch(e){}}};
+var _draftT;function planDraft(){clearTimeout(_draftT);_draftT=setTimeout(function(){try{sauverChamps();store.set("draft",data);}catch(e){}},600);}
+const CATS=[["bariatrique","Bariatrique"],["adultes","Adultes"],["adolescents","Adolescents"],["enfants","Enfants"],["pairs_inclus","Pairs inclus"],["pros_inclus","Pros inclus"]];
+function dateAuj(){var d=new Date();function z(n){return (n<10?"0":"")+n;}return z(d.getDate())+"/"+z(d.getMonth()+1)+"/"+d.getFullYear();}
+let data={type:"FeatureCollection",features:[]}; let cur=0; let filtre="";
+/* --- axe TYPE d entite (association / pair_aidant / restaurant) ---
+   Un seul GeoJSON : chaque feature porte properties.type. Le contenu du
+   formulaire est identique pour les 3 modes a ce stade ; il pourra diverger
+   plus tard (ex. champ "Type de nourriture" propre aux restaurants). */
+var modeType="association";
+var MODES={
+  association:{titre:"Éditeur des associations",cls:"t-asso",lblNom:"Nom de l'association",neuf:"NOUVELLE ASSOCIATION",mot:"association",imp:"nouvelle association"},
+  pair_aidant:{titre:"Éditeur des pair-aidants",cls:"t-pair",lblNom:"Nom du pair-aidant",neuf:"NOUVEAU PAIR-AIDANT",mot:"pair-aidant",imp:"nouveau pair-aidant"},
+  restaurant:{titre:"Éditeur des restaurants",cls:"t-resto",lblNom:"Nom du restaurant",neuf:"NOUVEAU RESTAURANT",mot:"restaurant",imp:"nouveau restaurant"}
+};
+function typeDe(f){return (f&&f.properties&&f.properties.type)||"association";}
+function idxMode(){var a=[];data.features.forEach(function(f,i){if(typeDe(f)===modeType)a.push(i);});return a;}
+function setMode(t){
+  if(!MODES[t])t="association"; modeType=t; var cfg=MODES[t];
+  var h=document.querySelector("header"); h.classList.remove("t-asso","t-pair","t-resto"); h.classList.add(cfg.cls);
+  var tt=document.getElementById("ed-titre"); if(tt)tt.textContent=cfg.titre;
+  var ln=document.getElementById("lbl-nom"); if(ln)ln.textContent=cfg.lblNom;
+  var cs=document.getElementById("cases-sect"); if(cs)cs.style.display=(t==="restaurant")?"none":"";
+  var ib=document.getElementById("b-importbloc"); if(ib)ib.innerHTML='<i class="fa fa-download"></i> Importer le bloc ('+cfg.imp+')';
+  document.getElementById("t-asso").classList.toggle("on",t==="association");
+  document.getElementById("t-pair").classList.toggle("on",t==="pair_aidant");
+  document.getElementById("t-resto").classList.toggle("on",t==="restaurant");
+  var im=idxMode(); cur=im.length?im[0]:-1;
+  chargerChamps(); rendreListe();
+}
+function majAffichageDate(){var el=document.getElementById("maj-label");el.textContent=data.date_maj?("MàJ : "+data.date_maj):"MàJ : (à la sauvegarde)";}
+
+/* rendu apercu (aligne sur la carte) */
+marked.setOptions({breaks:false,gfm:true});
+function preprocessFiche(txt){
+  txt=txt.replace(/```diaporama[\s\S]*?```/g,"").replace(/!\(img_[A-Za-z0-9]+\)/g,"");
+  txt=txt.replace(/!\(!?\((https?:\/\/[^\s)]+)[^)]*\)[^)]*\)/g,"[vidéo]").replace(/!\((https?:\/\/[^\s)]+)(?:\s+\d+x\d+)?\)/g,"[vidéo]");
+  txt=txt.replace(/\[([^\]]+)\]\(app:\/\/moveTo\?[^)]*\)/g,"$1");
+  txt=txt.replace(/\[\+\+\s*(.+?)\s*\+\+\]\s*(?:<br>)?\s*([\s\S]*?)\[----\]/g,function(m,t,c){var l=c.split(/<br>|\n/).map(function(x){return x.replace(/^\s*\|?\s*/,'').trim();}).filter(function(x){return x.length;});var it=l.map(function(x){return '<div class="adresse">'+x+'</div>';}).join("");if(l.length<=1)return "\n\n"+it+"\n\n";return '\n\n<details open><summary>'+t+' ('+l.length+')</summary>'+it+'</details>\n\n';});
+  txt=txt.replace(/\[--\s*(.+?)\s*--\]/g,'\n<div class="adr-titre">$1</div>\n');
+  txt=txt.replace(/--\]/g,"");
+  txt=txt.replace(/^[ \t]*:fa-plus-square:(?::?#[0-9a-fA-F]{3,6}:)?[ \t]*(.+)$/gm,'<div class="adresse"><i class="fa fa-plus-square" style="color:#A2368F"></i> $1</div>');
+  txt=txt.replace(/\*\*[ \t]*(.+?)[ \t]*\*\*/g,"**$1**");
+  txt=txt.replace(/:fa-([a-z0-9-]+):(?::?#([0-9a-fA-F]{3,6}):)?/g,function(m,n,h){return h?'<i class="fa fa-'+n+'" style="color:#'+h+'"></i>':'<i class="fa fa-'+n+'"></i>';});
+  return txt;
+}
+function rafraichirApercu(){document.getElementById("preview").innerHTML=marked.parse(preprocessFiche(document.getElementById("f-fiche").value||""));}
+
+function rendreListe(){var el=document.getElementById("liste");el.innerHTML="";data.features.forEach(function(f,i){if(typeDe(f)!==modeType)return;var nom=f.properties.nom||"(sans nom)";if(filtre&&nom.toLowerCase().indexOf(filtre)<0)return;var d=document.createElement("div");d.className="item"+(i===cur?" sel":"");d.innerHTML='<span class="pastille"></span>'+nom;d.addEventListener("click",function(){selectionner(i);});el.appendChild(d);});}
+function props(){return (data.features[cur]&&data.features[cur].properties)||{};} function coords(){return (data.features[cur]&&data.features[cur].geometry.coordinates)||[0,0];}
+function selectionner(i){sauverChamps();cur=i;chargerChamps();rendreListe();}
+function chargerChamps(){var im=idxMode();
+  if(cur<0||!data.features[cur]){
+    document.getElementById("f-nom").value="";document.getElementById("f-logo").value="";if(typeof majLogoWarn==="function")majLogoWarn();
+    document.getElementById("f-lng").value="";document.getElementById("f-lat").value="";
+    document.getElementById("f-fiche").value="";rafraichirApercu();
+    document.getElementById("pos").textContent="0 / "+im.length;
+    CATS.forEach(function(cc){document.querySelectorAll('[data-cat="'+cc[0]+'"] button').forEach(function(b){b.classList.toggle("on",b.dataset.val==="");});});
+    return;
+  }
+  var p=props(),c=coords();
+  document.getElementById("f-nom").value=p.nom||"";document.getElementById("f-logo").value=p.logo||"";document.getElementById("f-zone").value=p.zone||"metropole";majLogoWarn();
+  document.getElementById("f-lng").value=c[0];document.getElementById("f-lat").value=c[1];
+  document.getElementById("pos").textContent=(im.indexOf(cur)+1)+" / "+im.length;
+  CATS.forEach(function(cc){var v=p[cc[0]]===undefined?"":p[cc[0]];document.querySelectorAll('[data-cat="'+cc[0]+'"] button').forEach(function(b){b.classList.toggle("on",b.dataset.val===v);});});
+  document.getElementById("f-fiche").value=p.fiche||"";rafraichirApercu();}
+function sauverChamps(){if(cur<0||!data.features[cur])return;var p=props(),c=coords();p.nom=document.getElementById("f-nom").value.trim();p.logo=document.getElementById("f-logo").value.trim();var lng=parseFloat(document.getElementById("f-lng").value),lat=parseFloat(document.getElementById("f-lat").value);if(!isNaN(lng))c[0]=lng;if(!isNaN(lat))c[1]=lat;p.fiche=document.getElementById("f-fiche").value;var zsel=document.getElementById("f-zone");if(zsel)p.zone=zsel.value;}
+
+(function(){var host=document.getElementById("cats");CATS.forEach(function(cc){var box=document.createElement("div");box.className="tri";box.setAttribute("data-cat",cc[0]);box.innerHTML='<div class="t-lbl">'+cc[1]+'</div><div class="opts"><button class="oui" data-val="oui">Oui</button><button class="non" data-val="non">Non</button><button class="vide" data-val="">Vide</button></div>';box.querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){var v=b.dataset.val;if(v==="")delete props()[cc[0]];else props()[cc[0]]=v;box.querySelectorAll("button").forEach(function(x){x.classList.toggle("on",x===b);});planDraft();});});host.appendChild(box);});})();
+
+document.getElementById("f-fiche").addEventListener("input",rafraichirApercu);
+document.getElementById("f-nom").addEventListener("input",function(){props().nom=this.value;rendreListe();});
+document.getElementById("b-maj").addEventListener("click",function(){var i=document.getElementById("f-nom");i.value=i.value.toUpperCase();props().nom=i.value;rendreListe();planDraft();});
+document.getElementById("prev").addEventListener("click",function(){var im=idxMode();var k=im.indexOf(cur);if(k>0)selectionner(im[k-1]);});
+document.getElementById("next").addEventListener("click",function(){var im=idxMode();var k=im.indexOf(cur);if(k>=0&&k<im.length-1)selectionner(im[k+1]);});
+document.getElementById("q").addEventListener("input",function(){filtre=this.value.toLowerCase().trim();rendreListe();});
+document.getElementById("b-add").addEventListener("click",function(){sauverChamps();data.features.push({type:"Feature",geometry:{type:"Point",coordinates:[2.4,46.7]},properties:{type:modeType,nom:MODES[modeType].neuf,logo:"",fiche:"",zone:"metropole"}});cur=data.features.length-1;chargerChamps();rendreListe();planDraft();toast("Ajoutée");});
+document.getElementById("b-del").addEventListener("click",function(){if(!data.features.length)return;if(!confirm("Supprimer \""+(props().nom||"")+"\" ?"))return;data.features.splice(cur,1);if(cur>=data.features.length)cur=Math.max(0,data.features.length-1);chargerChamps();rendreListe();planDraft();toast("Supprimée");});
+
+/* geocodage via API Adresse (BAN) */
+document.getElementById("b-geo").addEventListener("click",function(){
+  var q=document.getElementById("f-adr-geo").value.trim(); if(!q){toast("Saisissez une adresse");return;}
+  toast("Recherche...");
+  fetch("https://api-adresse.data.gouv.fr/search/?limit=1&q="+encodeURIComponent(q)).then(function(r){return r.json();}).then(function(j){
+    if(j.features&&j.features.length){var c=j.features[0].geometry.coordinates;var pr=j.features[0].properties;
+      document.getElementById("f-lng").value=c[0].toFixed(6);document.getElementById("f-lat").value=c[1].toFixed(6);
+      var co=coords();co[0]=c[0];co[1]=c[1];
+      planDraft();toast("Trouvé : "+(pr.label||"")+" (score "+Math.round((pr.score||0)*100)+"%) — vérifiez");
+    } else toast("Adresse introuvable");
+  }).catch(function(){toast("Géocodage indisponible (connexion ?)");});
+});
+
+/* sauvegarde */
+function nettoyerPourExport(){var out={type:"FeatureCollection",date_maj:dateAuj(),features:data.features.map(function(f){var p=f.properties,np={type:typeDe(f),nom:p.nom||"",logo:p.logo||"",fiche:p.fiche||"",zone:p.zone||"metropole"};CATS.forEach(function(cc){if(p[cc[0]]==="oui"||p[cc[0]]==="non")np[cc[0]]=p[cc[0]];});return {type:"Feature",geometry:f.geometry,properties:np};})};return out;}
+document.getElementById("b-save").addEventListener("click",function(){sauverChamps();var out=nettoyerPourExport();data.date_maj=out.date_maj;majAffichageDate();store.set("data",data);var blob=new Blob([JSON.stringify(out,null,1)],{type:"application/geo+json"});var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="Carte_Obesite.geojson";a.click();store.set("draft",null);document.getElementById("brouillon").style.display="none";toast("Sauvegardé ("+out.features.length+" fiches)");});
+document.getElementById("b-open").addEventListener("click",function(){document.getElementById("file").click();});
+document.getElementById("file").addEventListener("change",function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var j=JSON.parse(r.result);if(!j.features)throw 0;document.getElementById("missing").style.display="none";data=j;setMode(modeType);majAffichageDate();toast("Chargé : "+data.features.length);}catch(e){alert("GeoJSON invalide");}};r.readAsText(f);});
+
+/* import assiste */
+function nettoieVal(v){v=(v||"").replace(/<br>\s*$/i,"").trim();v=v.replace(/^\[/,"").replace(/\]$/,"").trim();if(v===""||/^-+$/.test(v))return "";return v;}
+function elaguerBloc(body){return (body||"").split("\n").filter(function(L){var m=L.match(/^\s*\|\s*:fa-[^|]*\|(.*)\|\s*$/);if(!m)return true;var c=m[1].trim();var lk=c.match(/\]\(([^)]*)\)/);var val=(lk?lk[1]:c).trim().replace(/^-+$/,"");return val!=="";}).join("\n");}
+function zoneDePays(p){p=(p||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();if(/belg/.test(p))return "belgique";if(/suis|swiss|helvet/.test(p))return "suisse";if(/canad|quebec/.test(p))return "canada";if(/guyane/.test(p))return "guyane";if(/reunion/.test(p))return "reunion";if(/antill|guadelou|martiniq/.test(p))return "antilles";return "metropole";}
+function parseBloc(txt){
+  txt=txt.replace(/\r/g,"");
+  var idx=txt.search(/^\s*===\s*$/m);
+  var head=idx>=0?txt.slice(0,idx):txt;
+  var body=idx>=0?txt.slice(idx).replace(/^\s*===\s*$/m,"").replace(/^\n+/,""):"";
+  function champ(labels){var L=head.split("\n");for(var i=0;i<L.length;i++){for(var j=0;j<labels.length;j++){var re=new RegExp("^\\s*"+labels[j]+"\\s*:","i");if(re.test(L[i]))return nettoieVal(L[i].replace(re,""));}}return "";}
+  var nom=(champ(["Nom[^:]*"])||"").toUpperCase().replace(/\s+/g," ").trim();
+  var lng=champ(["Longitude"]).replace(",","."); var lat=champ(["Latitude"]).replace(",",".");
+  var logo=champ(["Logo"]); var pays=champ(["Pays"]);
+  var cases=[["Champs Bariatrique","Bariatrique","bariatrique"],["Champs Adultes","Adultes","adultes"],["Champs Adolescents","Adolescents","adolescents"],["Champs Enfants","Enfants","enfants"],["Champs Pairs inclus","Pairs inclus","pairs_inclus"],["Champs Pros inclus","Pros inclus","pros_inclus"]];
+  var props={};cases.forEach(function(c){var v=champ([c[0],c[1]]).toLowerCase();if(v==="oui")props[c[2]]="oui";else if(v==="non")props[c[2]]="non";});
+  body=body.replace(/```diaporama[\s\S]*?```/g,"").replace(/```diaporama[\s\S]*$/,"").trim();
+  body=elaguerBloc(body);
+  return {nom:nom,logo:logo,lng:parseFloat(lng),lat:parseFloat(lat),props:props,fiche:body,zone:zoneDePays(pays)};
+}
+document.getElementById("b-importbloc").addEventListener("click",function(){
+  var txt=document.getElementById("imp-bloc").value;
+  if(!txt.trim()){toast("Collez d'abord un bloc");return;}
+  var r=parseBloc(txt);
+  if(!r.nom){toast("Nom introuvable dans le bloc");return;}
+  var feat={type:"Feature",geometry:{type:"Point",coordinates:[isNaN(r.lng)?2.4:r.lng,isNaN(r.lat)?46.7:r.lat]},properties:{type:modeType,nom:r.nom,logo:r.logo||"",fiche:r.fiche||"",zone:r.zone||"metropole"}};
+  if(modeType!=="restaurant"){["bariatrique","adultes","adolescents","enfants","pairs_inclus","pros_inclus"].forEach(function(k){if(r.props[k])feat.properties[k]=r.props[k];});}
+  sauverChamps();data.features.push(feat);cur=data.features.length-1;chargerChamps();rendreListe();basculer("edit");planDraft();
+  document.getElementById("imp-bloc").value="";
+  var av=[];if(isNaN(r.lng)||isNaN(r.lat))av.push("coordonnées manquantes");
+  toast("Importé : "+r.nom+(av.length?" — "+av.join(", "):""));
+});
+
+function basculer(m){document.body.className="mode-"+m;document.getElementById("m-edit").classList.toggle("on",m==="edit");document.getElementById("m-import").classList.toggle("on",m==="import");}
+/* ---------- Editeur des nouveautes (News.json) ---------- */
+var newsList=[]; var newsCur=-1;
+var RUBLBL_ED={app:"Nouvelles fonctions",restaurant:"Restaurants",association:"Associations",pair_aidant:"Pair-aidants"};
+function neApercu(){var h=marked.parse(document.getElementById("ne-contenu").value||"");document.getElementById("ne-prev").innerHTML=h.replace(/<a href="(https?:[^"]*)"/g,'<a href="$1" target="_blank" rel="noopener"');}
+function neRendreListe(){var el=document.getElementById("ne-list");el.innerHTML="";newsList.forEach(function(it,i){var d=document.createElement("div");d.className="ne-item"+(i===newsCur?" sel":"");var meta=document.createElement("div");meta.className="ne-i-meta";meta.textContent=(it.date||"?")+" \u00b7 "+(RUBLBL_ED[it.rubrique]||it.rubrique||"app");var txt=document.createElement("div");txt.className="ne-i-txt";txt.textContent=(it.contenu||"").replace(/\s+/g," ").slice(0,70);d.appendChild(meta);d.appendChild(txt);d.addEventListener("click",function(){neSelect(i);});el.appendChild(d);});}
+function neChargerChamps(){var it=newsList[newsCur];document.getElementById("ne-date").value=it?(it.date||""):"";document.getElementById("ne-rub").value=it?(it.rubrique||"app"):"app";document.getElementById("ne-contenu").value=it?(it.contenu||""):"";neApercu();}
+function neSauverChamps(){var it=newsList[newsCur];if(!it)return;it.date=document.getElementById("ne-date").value.trim();it.rubrique=document.getElementById("ne-rub").value;it.contenu=document.getElementById("ne-contenu").value;}
+function neSelect(i){neSauverChamps();newsCur=i;neChargerChamps();neRendreListe();}
+function neOuvrir(){if(newsCur<0&&newsList.length)newsCur=0;neChargerChamps();neRendreListe();document.getElementById("news-editor").classList.add("on");}
+document.getElementById("t-news").addEventListener("click",neOuvrir);
+document.getElementById("ne-close").addEventListener("click",function(){neSauverChamps();document.getElementById("news-editor").classList.remove("on");});
+document.getElementById("ne-contenu").addEventListener("input",function(){if(newsList[newsCur])newsList[newsCur].contenu=this.value;neApercu();});
+document.getElementById("ne-date").addEventListener("input",function(){if(newsList[newsCur])newsList[newsCur].date=this.value.trim();neRendreListe();});
+document.getElementById("ne-rub").addEventListener("change",function(){if(newsList[newsCur])newsList[newsCur].rubrique=this.value;neRendreListe();});
+document.getElementById("ne-add").addEventListener("click",function(){neSauverChamps();newsList.unshift({date:(typeof dateAuj==="function"?dateAuj():""),rubrique:"app",contenu:""});newsCur=0;neChargerChamps();neRendreListe();});
+document.getElementById("ne-del").addEventListener("click",function(){if(newsCur<0||!newsList[newsCur])return;if(!confirm("Supprimer cette nouveaute ?"))return;newsList.splice(newsCur,1);newsCur=newsList.length?0:-1;neChargerChamps();neRendreListe();});
+document.getElementById("ne-save").addEventListener("click",function(){neSauverChamps();var out={date_maj:(typeof dateAuj==="function"?dateAuj():""),news:newsList};var blob=new Blob([JSON.stringify(out,null,1)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="News.json";a.click();if(typeof toast==="function")toast("News.json sauvegarde ("+newsList.length+")");});
+document.getElementById("ne-load").addEventListener("change",function(e){var file=e.target.files[0];if(!file)return;var rd=new FileReader();rd.onload=function(){try{var j=JSON.parse(rd.result);newsList=(j&&j.news)||[];newsCur=newsList.length?0:-1;neChargerChamps();neRendreListe();}catch(err){alert("News.json invalide");}};rd.readAsText(file);});
+function logoDouteux(v){v=(v||"").trim();if(!v)return false;if(/\s/.test(v))return false;if(/\.(png|jpe?g|gif|webp|svg)$/i.test(v))return false;if(!/^[A-Za-z0-9_-]+$/.test(v))return false;return /\d/.test(v)||v.length>10;}
+function majLogoWarn(){var w=document.getElementById("logo-warn");if(!w)return;var el=document.getElementById("f-logo");w.style.display=(el&&logoDouteux(el.value))?"block":"none";}
+(function(){var el=document.getElementById("f-logo");if(el)el.addEventListener("input",majLogoWarn);})();
+fetch("News.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){newsList=(j&&j.news)||[];}).catch(function(){});
+document.getElementById("m-edit").addEventListener("click",function(){basculer("edit");});
+document.getElementById("m-import").addEventListener("click",function(){basculer("import");});
+document.getElementById("t-asso").addEventListener("click",function(){setMode("association");});
+document.getElementById("t-pair").addEventListener("click",function(){setMode("pair_aidant");});
+document.getElementById("t-resto").addEventListener("click",function(){setMode("restaurant");});
+var toastT;function toast(msg){var t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("show");},2600);}
+document.querySelector("main").addEventListener("input",planDraft);
+setMode("association");majAffichageDate();
+function proposerBrouillon(){var dr=store.get("draft");if(dr&&dr.features&&dr.features.length){document.getElementById("brouillon").style.display="block";}}
+document.getElementById("br-restore").addEventListener("click",function(){var dr=store.get("draft");if(dr&&dr.features){data=dr;setMode(modeType);majAffichageDate();}document.getElementById("brouillon").style.display="none";toast("Brouillon restauré");});
+document.getElementById("br-ignore").addEventListener("click",function(){store.set("draft",null);document.getElementById("brouillon").style.display="none";});
+/* lecture automatique du fichier du meme repertoire (comme la carte) */
+fetch("Carte_Obesite.geojson",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(fc){if(fc&&fc.features){document.getElementById("missing").style.display="none";data=fc;setMode(modeType);majAffichageDate();toast("Lu : Carte_Obesite.geojson ("+data.features.length+" fiches)");proposerBrouillon();}else throw 0;}).catch(function(){document.getElementById("missing").style.display="block";proposerBrouillon();});
+</script>
+</body>
+</html>
