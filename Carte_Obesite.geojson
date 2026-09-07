@@ -2612,7 +2612,8 @@
     "logo": "054TrattoriaPaola.jpg",
     "fiche": "| :fa-info:#A2368F:|**Identification**|\n| ---- | ---- |\n| :fa-map-o::#A2368F:|14 avenue Charles de Gaulle,<br>71600 Paray-le-Monial <br>France|\n| :fa-scissors::#A2368F:|Menu Bariatrique|\n| :fa-book::#A2368F:|Italien|\n| :fa-chain::#A2368F:|[Site Web](https://www.facebook.com/pastapaola)|\n| :fa-refresh::#A2368F:|Fiche Maj en 2019|\n\n** :fa-newspaper-o: Commentaires**<br>\nFormule bariatrique",
     "region": "Bourgogne-Franche-Comté",
-    "date_maj": ""
+    "date_maj": "",
+    "menu_bariatrique": "oui"
    }
   },
   {
@@ -2865,6 +2866,24 @@
     "fiche": "| :fa-info:#A2368F:|**Identification**|\n| ---- | ---- |\n| :fa-map-o::#A2368F:|Quai Notre Dame 12<br>7500 Tournai <br>Belgique|\n| :fa-book::#A2368F:|cuisine fraîche et moderne|\n| :fa-facebook-official::#A2368F:|[FaceBook](https://www.facebook.com/p/Um-Beaumonde-61591325465975/)|\n| :fa-instagram::#A2368F:|[Instagram](https://www.instagram.com/um.beaumonde/)|\n| :fa-refresh::#A2368F:|Fiche Maj le 26/08/2026|\n\n** :fa-newspaper-o: Commentaires** <br>\nLe concept est basé sur le partage., on commande plusieurs plats ou entrées.Très convivial et pas de stress 🙂<br>Cindy ",
     "region": "Hainaut",
     "date_maj": "26/08/2026"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -4.491712165319581,
+     48.38902176237663
+    ]
+   },
+   "properties": {
+    "type": "restaurant",
+    "nom": "ENTRE-MER BREST",
+    "logo": "054Entremerbrest.jpg",
+    "fiche": "| :fa-info:#A2368F:|**Identification**|\n| ---- | ---- |\n| :fa-map-o::#A2368F:|59 rue Jean Macé<br>29200 Brest <br>France|\n| :fa-instagram::#A2368F:|[Instagram](https://www.instagram.com/entre.mer.brest/)|\n| :fa-refresh::#A2368F:|Fiche Maj le 18/05/2026|\n\n** :fa-newspaper-o: Commentaires** <br>\nIls comprennent bien les impératifs des opérés bariatriques et des patients sous TMO. Toujours prêt à proposer un doggy. Demandez Eddy.<br> Olivier",
+    "region": "Bretagne",
+    "date_maj": "18/05/2026"
    }
   }
  ]
