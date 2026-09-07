@@ -1,6 +1,11 @@
 {
- "date_maj": "05/09/2026",
+ "date_maj": "07/09/2026",
  "news": [
+  {
+   "date": "07/09/2026",
+   "rubrique": "restaurant",
+   "contenu": "Entre-Mer Brest  29200 Brest \n"
+  },
   {
    "date": "05/09/2026",
    "rubrique": "app",
