@@ -59,7 +59,13 @@
   .zone-btn{display:inline-flex;align-items:center;gap:6px;background:var(--slate-2);border:1px solid rgba(255,255,255,.25);border-radius:9px;padding:8px 11px;color:#e7eaf1;font:inherit;font-size:12px;font-weight:600;cursor:pointer;}
   .zone-btn .fa{color:#aeb6c6;font-size:12px;}
   .zone-car{color:#aeb6c6;font-size:10px;}
-  .zone-menu{position:absolute;top:calc(100% + 4px);left:0;min-width:172px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(20,28,45,.28);z-index:1300;overflow:hidden;}
+  .zone-menu{position:absolute;top:calc(100% + 4px);left:0;min-width:250px;max-height:min(70vh,440px);background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(20,28,45,.28);z-index:1300;overflow:auto;}
+  .reg-search{width:calc(100% - 16px);margin:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:13px;}
+  .zone-menu .reg-head{font-weight:800;background:#faf6fb;}
+  .zone-menu .reg-sub{padding-left:24px;font-size:12.5px;}
+  #reg-modal .rm-h{font-weight:800;font-size:12px;color:var(--violet);margin:12px 0 4px;text-transform:uppercase;letter-spacing:.3px;}
+  #reg-modal .rm-row{display:flex;align-items:center;gap:10px;padding:7px 2px;font-size:13.5px;cursor:pointer;}
+  #reg-modal .rm-row input{width:18px;height:18px;accent-color:var(--violet);flex:0 0 auto;}
   .zone-menu button{display:block;width:100%;text-align:left;border:0;background:transparent;padding:9px 12px;font:inherit;font-size:13px;color:var(--ink);cursor:pointer;}
   .zone-menu button:hover,.zone-menu button.on{background:var(--violet-soft);color:var(--violet);font-weight:600;}
   .row3{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;}
@@ -76,6 +82,7 @@
   .sp-tag{flex:0 0 auto;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;padding:2px 6px;border-radius:6px;background:var(--violet-soft);color:var(--violet);}
   .sp-tag.pa{background:#e6f4f1;color:var(--teal);}
   .sp-tag.re{background:#fdf0e2;color:#b5722a;}
+  .sp-tag.ap{background:#e5eef7;color:#2f6fb0;}
   .sp-ville-opt{color:var(--slate);font-weight:600;}
   .sp-ville-opt .fa{color:var(--violet);}
   .sp-msg{margin-top:6px;font-size:11.5px;color:#cfd5e2;}
@@ -216,7 +223,7 @@
   <div class="row2">
     <button class="install-btn" id="btn-install" type="button">📲 Installer</button>
     <div class="zone-dd" id="zone-dd">
-      <button class="zone-btn" id="zone-btn" type="button" aria-haspopup="listbox" aria-expanded="false"><i class="fa fa-map-marker"></i> <span id="zone-lab">Métropole</span> <span class="zone-car">▾</span></button>
+      <button class="zone-btn" id="zone-btn" type="button" aria-haspopup="listbox" aria-expanded="false"><i class="fa fa-map-marker"></i> <span id="zone-lab">Aller à…</span> <span class="zone-car">▾</span></button>
       <div class="zone-menu" id="zone-menu" role="listbox" hidden></div>
     </div>
     <button class="fond-toggle" id="btn-fond" type="button"><i class="fa fa-exchange"></i> Fond IGN</button>
@@ -241,6 +248,14 @@
     <div class="modal-bar"><span class="m-nom">✨ Dernières nouveautés</span><button class="close" id="news-close">&times;</button></div>
     <div id="news-body" style="padding:16px;overflow:auto;"></div>
     <div style="padding:12px 16px;border-top:1px solid var(--line);text-align:center;"><button class="ap-btn" id="news-ok" style="min-width:120px;background:var(--violet);border-color:var(--violet);color:#fff;font-weight:700;">OK</button></div>
+  </div>
+</div>
+<div class="modal" id="reg-modal" role="dialog" aria-modal="true">
+  <div class="modal-box" style="max-width:460px;display:flex;flex-direction:column;max-height:82vh;">
+    <div class="modal-bar"><span class="m-nom">Choisissez les raccourcis de sélection</span></div>
+    <div style="padding:12px 16px 4px;"><input type="text" id="reg-modal-q" placeholder="Rechercher une région…" style="width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;font:inherit;font-size:13px;"></div>
+    <div id="reg-modal-list" style="flex:1;overflow:auto;padding:0 16px 8px;"></div>
+    <div style="padding:12px 16px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px;"><button class="ap-btn" id="reg-modal-non" type="button" style="width:auto;margin:0;">Non</button><button class="ap-btn" id="reg-modal-ok" type="button" style="width:auto;margin:0;background:var(--violet);border-color:var(--violet);color:#fff;">Valider</button></div>
   </div>
 </div>
 <div class="modal" id="modal" role="dialog" aria-modal="true">
@@ -268,7 +283,7 @@
     </div>
     <div class="guide-body">
       <div class="guide-tab-content active" id="content-guide"><h4>📖 Guide d&rsquo;utilisation</h4><div id="guide-assoc"><div class="sect-sub">Associations</div>
-        <p>L&rsquo;association de patients-partenaires <a href="https://www.linkedin.com/company/omeave-obesites-mode-d-emploi/posts/?feedView=all" target="_blank" rel="noopener">Obésité Mode d&rsquo;Emploi Apprendre à Vivre Ensemble (OMEAVE)</a> publie une carte recensant des associations de patients francophones engagées dans l&rsquo;accompagnement des personnes concernées par l&rsquo;obésité. Cette cartographie repose sur des critères objectifs, notamment l&rsquo;enregistrement des structures au Journal Officiel.</p>
+        <p>Cette cartographie repose sur des critères objectifs, notamment l&rsquo;enregistrement des structures au Journal Officiel.</p>
         <p>La carte est établie avec l&rsquo;accord des associations référencées, qui partagent toutes une approche médicale commune de l&rsquo;obésité. À ce jour, elle recense <b><span id="guide-nb">…</span> associations</b>, réparties sur <b><span id="guide-total">…</span> lieux</b>. Cette carte est mise à jour et enrichie en continu depuis 2024. Elle s&rsquo;enrichit progressivement.</p>
         <p>Elle constitue déjà une ressource identifiée dans le guide de la HAS «&nbsp;<a href="https://www.has-sante.fr/upload/docs/application/pdf/2009-09/brochure_obesite_patient_220909.pdf" target="_blank" rel="noopener">Chirurgie de l&rsquo;obésité – Ce qu&rsquo;il faut savoir avant de vous décider » (p. 13)</a> et sur le site <a href="https://www.obesitefrance.fr/actualites/prise-en-charge/cartographie-des-associations-de-patients-par-omeave" target="_blank" rel="noopener">des centres spécialisés de l&rsquo;obésité</a>.</p>
         <p>Les principaux objectifs de cette carte sont :</p>
@@ -287,7 +302,7 @@
         <p>Si vous visitez un restaurant, ajoutez votre avis.</p>
         </div>
       </div>
-      <div class="guide-tab-content" id="content-config"><h4>⚙️ Configuration</h4><div id="cfg-install-wrap" style="display:none;margin-bottom:12px;"><button class="ap-btn" id="cfg-install" type="button">📲 Installer l&rsquo;application sur cet appareil</button></div><div id="cfg-assoc"><div id="cfg-toggles"></div><div class="ap-sep"></div></div><div class="cfg-sub">Recherche de ville — pays inclus</div><div id="cfg-pays" class="pays-row"></div><div class="ap-sep"></div><div class="cfg-sub">Nouveautés</div><label class="tgl"><input type="checkbox" id="cfg-news-on"><span>Afficher « Dernières nouveautés au démarrage »</span></label><div style="margin-top:8px;"><button class="ap-btn" id="cfg-news-see" type="button">✨ Voir les nouveautés</button></div><div class="ap-sep"></div><div class="cfg-sub">🔒 Confidentialité</div><p style="font-size:12.5px;color:#374151;line-height:1.5;margin:0;">Vos données restent sur votre appareil. Aucune information n'est envoyée à un serveur. Nous ne collectons rien.</p><div class="ap-sep"></div><button class="ap-btn" id="cfg-reset" type="button" style="border-color:#f0d0d0;color:#c0392b;">♻️ Réinitialiser l&rsquo;application</button><p style="font-size:11px;color:var(--muted);margin-top:2px;">Déconnecte le service worker, vide le cache et efface les réglages locaux, puis recharge. Vos données en ligne ne sont pas touchées.</p></div>
+      <div class="guide-tab-content" id="content-config"><h4>⚙️ Configuration</h4><div id="cfg-install-wrap" style="display:none;margin-bottom:12px;"><button class="ap-btn" id="cfg-install" type="button">📲 Installer l&rsquo;application sur cet appareil</button></div><div class="cfg-sub">📅 Mises à jour depuis</div><input type="range" id="date-slider" style="width:100%;accent-color:var(--violet);"><div style="text-align:center;font-size:12px;color:var(--slate);margin:2px 0;">Depuis le <b id="date-slider-lab">—</b></div><p style="font-size:11px;color:var(--muted);text-align:center;margin:0 0 4px;">Masque les fiches mises à jour avant cette date.</p><div class="ap-sep"></div><button class="ap-btn" id="cfg-reg-modal" type="button">🗺️ Choisissez les raccourcis de sélection</button><div class="ap-sep"></div><div id="cfg-assoc"><div id="cfg-toggles"></div><div class="ap-sep"></div></div><div class="cfg-sub">Recherche de ville — pays inclus</div><div id="cfg-pays" class="pays-row"></div><div class="ap-sep"></div><div class="cfg-sub">Nouveautés</div><label class="tgl"><input type="checkbox" id="cfg-news-on"><span>Afficher « Dernières nouveautés au démarrage »</span></label><div style="margin-top:8px;"><button class="ap-btn" id="cfg-news-see" type="button">✨ Voir les nouveautés</button></div><div class="ap-sep"></div><div class="cfg-sub">🔒 Confidentialité</div><p style="font-size:12.5px;color:#374151;line-height:1.5;margin:0;">Vos données restent sur votre appareil. Aucune information n'est envoyée à un serveur. Nous ne collectons rien.</p><div class="ap-sep"></div><button class="ap-btn" id="cfg-reset" type="button" style="border-color:#f0d0d0;color:#c0392b;">♻️ Réinitialiser l&rsquo;application</button><p style="font-size:11px;color:var(--muted);margin-top:2px;">Déconnecte le service worker, vide le cache et efface les réglages locaux, puis recharge. Vos données en ligne ne sont pas touchées.</p></div>
       <div class="guide-tab-content" id="content-apropos">
         <h4>ℹ️ À propos</h4>
         <p>Ceci est une application de patients pour des patients ou des professionnels de santé qui souhaitent partager des ressources utiles.</p>
@@ -331,7 +346,7 @@
 <div class="flotte" id="install-invite"><div class="f-txt">📲 Installer l'application sur votre téléphone ?</div><div class="f-row"><button class="f-ghost" id="inv-later" type="button">Plus tard</button><button class="f-yes" id="inv-yes" type="button">Oui, installer</button></div></div>
 <div class="flotte" id="kofi-banner"><div class="f-txt">Cette application est gratuite. Si elle vous aide, un café fait toujours plaisir ☕</div><div class="f-row"><button class="f-ghost" id="kofi-close" type="button">Plus tard</button><button class="f-ghost" id="kofi-done" type="button">J'ai soutenu</button><a class="f-kofi" id="kofi-go" href="https://ko-fi.com/obesiteguidepratique" target="_blank" rel="noopener">☕ Soutenir</a></div></div>
 <div class="toast" id="toast"></div>
-<footer><span id="foot-build">Build 57</span> <span id="foot-date"></span></footer>
+<footer><span id="foot-build">Build 63</span> <span id="foot-date"></span></footer>
 
 <script>
 const MENTION="Données obtenues sur le site : https://obesiteguidepratique.github.io/Cartographie/Carte_Obesite.html";
@@ -403,8 +418,8 @@ const map=L.map("map",{center:[46.7,2.4],zoom:6,layers:[fondIGN]});
 function tailleParZoom(z){ var t=22+(z-6)/(13-6)*(40-22); return Math.max(22,Math.min(40,Math.round(t))); }
 /* Couleur + symbole par type (association / pair_aidant / restaurant).
    Glyphes Font Awesome 4.7 (deja chargee, licence libre SIL OFL) : aucune dependance ajoutee. */
-var PINCOL={association:["#B44A9E","#7A1E68"],pair_aidant:["#12a596","#0a6157"],restaurant:["#c98330","#8a561f"]};
-var PINGLY={association:"fa-users",pair_aidant:"fa-handshake-o",restaurant:"fa-cutlery"};
+var PINCOL={association:["#B44A9E","#7A1E68"],pair_aidant:["#12a596","#0a6157"],restaurant:["#c98330","#8a561f"],apa:["#2f6fb0","#1e4f80"]};
+var PINGLY={association:"fa-users",pair_aidant:"fa-handshake-o",restaurant:"fa-cutlery",apa:"fa-bicycle"};
 function pin(size,multi,type){
   var h=Math.round(size*1.33);
   var col=PINCOL[type]||PINCOL.association; var fill=multi?col[1]:col[0];
@@ -423,10 +438,10 @@ function secPin(size){
   return L.divIcon({html:svg,className:"",iconSize:[size,h],iconAnchor:[size/2,h]});
 }
 
-var CLUCOL={association:"#B44A9E",pair_aidant:"#12a596",restaurant:"#c98330"};
+var CLUCOL={association:"#B44A9E",pair_aidant:"#12a596",restaurant:"#c98330",apa:"#2f6fb0"};
 function hexA(h,a){h=h.replace("#","");return "rgba("+parseInt(h.substr(0,2),16)+","+parseInt(h.substr(2,2),16)+","+parseInt(h.substr(4,2),16)+","+a+")";}
 function mkClusterIcon(type){var col=CLUCOL[type]||CLUCOL.association;return function(c){var n=c.getChildCount();var sz=n<10?38:n<50?46:n<200?54:62;var fs=n<100?13:(n<1000?12:11);return L.divIcon({html:'<div class="clu" style="width:'+sz+'px;height:'+sz+'px;font-size:'+fs+'px;background:'+col+';box-shadow:0 2px 7px rgba(20,28,45,.4),0 0 0 4px '+hexA(col,.22)+';">'+n+'</div>',className:'clu-wrap',iconSize:L.point(sz,sz)});};}
-var clusters={};["association","pair_aidant","restaurant"].forEach(function(t){var cg=L.markerClusterGroup({maxClusterRadius:48,showCoverageOnHover:false,spiderfyOnMaxZoom:true,chunkedLoading:true,iconCreateFunction:mkClusterIcon(t)});cg.on("click",function(e){if(e.layer&&e.layer._props)ouvrirFiche(e.layer);});map.addLayer(cg);clusters[t]=cg;});
+var clusters={};["association","pair_aidant","restaurant","apa"].forEach(function(t){var cg=L.markerClusterGroup({maxClusterRadius:48,showCoverageOnHover:false,spiderfyOnMaxZoom:true,chunkedLoading:true,iconCreateFunction:mkClusterIcon(t)});cg.on("click",function(e){if(e.layer&&e.layer._props)ouvrirFiche(e.layer);});map.addLayer(cg);clusters[t]=cg;});
 /* Fiche en popup de NIVEAU CARTE (ancree a la coordonnee, pas au marqueur) :
    elle survit au reclustering declenche par le recadrage B2. */
 function ouvrirFiche(m){
@@ -451,9 +466,9 @@ let markers=[]; var showAll=true; var catToggle={bariatrique:true,adultes:true,a
    Codes : 29=masquer assos, 32=afficher assos, 52=masquer restos, 54=afficher restos,
    40=masquer pair-aidants, 45=afficher pair-aidants (ces deux derniers provisoires).
    Ex : ...Carte_Obesite.html#29  ou  #29-54 (plusieurs codes). */
-var typeVisible={association:false,pair_aidant:false,restaurant:false};
-var URLVUE={"29":["association",false],"32":["association",true],"52":["restaurant",false],"54":["restaurant",true],"70":["pair_aidant",false],"22":["pair_aidant",true]};
-(function(){var s=(location.hash||"").split(/[?&]/)[0];var nums=s.match(/\d+/g)||[];if(!nums.length){typeVisible.restaurant=true;}else{nums.forEach(function(n){var a=URLVUE[n];if(a)typeVisible[a[0]]=a[1];});}var av=typeVisible.association;var aucun=!typeVisible.association&&!typeVisible.pair_aidant&&!typeVisible.restaurant;var ko=document.getElementById("adresse-ko");if(ko)ko.hidden=!aucun;var g=document.getElementById("guide-assoc");if(g)g.style.display=av?"":"none";var l=document.getElementById("res-logos-assoc");if(l)l.style.display=av?"":"none";var rb=document.getElementById("btn-resto");if(rb)rb.hidden=!typeVisible.restaurant;var cfa=document.getElementById("cfg-assoc");if(cfa)cfa.style.display=av?"":"none";var gr=document.getElementById("guide-resto");if(gr)gr.style.display=typeVisible.restaurant?"":"none";var subEl=document.querySelector(".sub");if(subEl){var vt=[];if(typeVisible.association)vt.push("a");if(typeVisible.pair_aidant)vt.push("p");if(typeVisible.restaurant)vt.push("r");var st="La page des ressources des opérés bariatriques";if(vt.length===1){st=vt[0]==="r"?"Les restaurants qui s'adaptent aux bariatriques":vt[0]==="a"?"La page des associations de personnes en obésité.":"La page des pairs-aidants spécialisés en obésité.";}subEl.textContent=st;}})();
+var typeVisible={association:false,pair_aidant:false,restaurant:false,apa:false};
+var URLVUE={"29":["association",false],"32":["association",true],"52":["restaurant",false],"54":["restaurant",true],"70":["pair_aidant",false],"22":["pair_aidant",true],"47":["apa",true],"38":["apa",false]};
+(function(){var s=(location.hash||"").split(/[?&]/)[0];var mR=/R(\d{2})/i.exec(s);if(mR)window.focusRegionCode=mR[1];var sType=s.replace(/R\d{2}/ig,"");var nums=sType.match(/\d+/g)||[];if(!nums.length){typeVisible.restaurant=true;}else{nums.forEach(function(n){var a=URLVUE[n];if(a)typeVisible[a[0]]=a[1];});}var av=typeVisible.association;var aucun=!typeVisible.association&&!typeVisible.pair_aidant&&!typeVisible.restaurant&&!typeVisible.apa;var ko=document.getElementById("adresse-ko");if(ko)ko.hidden=!aucun;var g=document.getElementById("guide-assoc");if(g)g.style.display=av?"":"none";var l=document.getElementById("res-logos-assoc");if(l)l.style.display=av?"":"none";var rb=document.getElementById("btn-resto");if(rb)rb.hidden=!typeVisible.restaurant;var cfa=document.getElementById("cfg-assoc");if(cfa)cfa.style.display=av?"":"none";var gr=document.getElementById("guide-resto");if(gr)gr.style.display=typeVisible.restaurant?"":"none";var subEl=document.querySelector(".sub");if(subEl){var vt=[];if(typeVisible.association)vt.push("a");if(typeVisible.pair_aidant)vt.push("p");if(typeVisible.restaurant)vt.push("r");if(typeVisible.apa)vt.push("x");var st="La page des ressources des opérés bariatriques";if(vt.length===1){st=vt[0]==="r"?"Les restaurants qui s'adaptent aux bariatriques":vt[0]==="a"?"La page des associations de personnes en obésité.":vt[0]==="p"?"La page des pairs-aidants spécialisés en obésité.":"La page des activités physiques adaptées aux opérés.";}subEl.textContent=st;}})();
 function catsActives(p){ return CATS.filter(function(c){return p[c[0]]==="oui";}); }
 
 function logoHtml(p){
@@ -498,9 +513,17 @@ function chargerFeatures(fc){
     markers.push(m);
   });
   majCompteursGuide(fc);
+  initDateSlider();
   appliquerFiltres();
+  if(window.focusRegionCode){var fr=RCODE[window.focusRegionCode];window.focusRegionCode=null;if(fr)setTimeout(function(){allerRegion(fr);},400);}
 }
-function visible(m){var t=m._props.type||"association";if(typeVisible[t]===false)return false;if(t!=="association")return true;if(showAll)return true;return CATS.some(function(c){return m._props[c[0]]==="oui" && catToggle[c[0]];});}
+var dateSeuil=null, dateSliderPret=false;
+function dateNum(s){var m=/^(\d{2})\/(\d{2})\/(\d{4})$/.exec(s||"");if(!m)return null;return Math.floor(Date.UTC(+m[3],+m[2]-1,+m[1])/86400000);}
+function passeDateFiltre(m){if(dateSeuil==null)return true;var d=dateNum(m._props.date_maj);if(d==null)return true;return d>=dateSeuil;}
+function jourEnDate(day){if(day==null)return "\u2014";var d=new Date(day*86400000);function z(n){return(n<10?"0":"")+n;}return z(d.getUTCDate())+"/"+z(d.getUTCMonth()+1)+"/"+d.getUTCFullYear();}
+function majDateLab(){var l=document.getElementById("date-slider-lab");if(l)l.textContent=jourEnDate(dateSeuil);}
+function initDateSlider(){if(dateSliderPret)return;var sl=document.getElementById("date-slider");if(!sl)return;var days=[];markers.forEach(function(m){var d=dateNum(m._props.date_maj);if(d!=null)days.push(d);});if(!days.length){sl.disabled=true;var l0=document.getElementById("date-slider-lab");if(l0)l0.textContent="(aucune date)";dateSliderPret=true;return;}var mn=Math.min.apply(null,days),mx=Math.max.apply(null,days);if(mx<=mn)mx=mn+1;sl.min=mn;sl.max=mx;sl.step=1;var st=mstore.get("dateSeuil");var v=(st!=null&&st>=mn&&st<=mx)?st:mn;sl.value=v;dateSeuil=v;majDateLab();sl.addEventListener("input",function(){dateSeuil=parseInt(sl.value,10);mstore.set("dateSeuil",dateSeuil);majDateLab();appliquerFiltres();});dateSliderPret=true;}
+function visible(m){if(!passeDateFiltre(m))return false;var t=m._props.type||"association";if(typeVisible[t]===false)return false;if(t!=="association")return true;if(showAll)return true;var aCat=CATS.some(function(c){return m._props[c[0]]==="oui";});if(!aCat)return true;return CATS.some(function(c){return m._props[c[0]]==="oui" && catToggle[c[0]];});}
 function appliquerFiltres(){
   markers.forEach(function(m){
     var cl=clusters[m._props.type||"association"]||clusters.association;
@@ -516,10 +539,7 @@ function majCompteur(){
   var el=document.getElementById("cfg-count");
   if(el){el.textContent=n+" association"+(n>1?"s":"")+" affichée"+(n>1?"s":"");el.classList.toggle("zero",n===0);}
   var al=document.getElementById("alarme-vide");if(al)al.style.display=(n===0)?"block":"none";
-  majZoneCount();
 }
-function comptesParZone(){var c={};markers.forEach(function(m){if(!visible(m))return;var z=m._props.zone||"metropole";c[z]=(c[z]||0)+1;});return c;}
-function majZoneCount(){var n=0;markers.forEach(function(m){if(visible(m)&&(m._props.zone||"metropole")===zoneCourante)n++;});var zc=document.getElementById("zone-count");if(zc)zc.textContent=" ("+n+")";}
 const CATS_CFG=[["bariatrique","Afficher les associations qui proposent un parcours bariatrique"],["adultes","Afficher les associations qui s'adressent aux adultes"],["adolescents","Afficher les associations qui s'adressent aux adolescents"],["enfants","Afficher les associations qui s'adressent aux enfants"],["pairs_inclus","Afficher les associations dont la direction contient au moins un pair-aidant"],["pros_inclus","Afficher les associations dont la direction contient au moins un professionnel de santé"]];
 var togEl=document.getElementById("cfg-toggles");
 // interrupteur maitre : Afficher toutes
@@ -623,24 +643,67 @@ document.addEventListener("click",function(e){
 });
 
 /* ---------- zones + fond ---------- */
-const ZONES={metropole:[[46.7,2.4],6],guyane:[[4.0,-53.0],7],reunion:[[-21.11,55.53],10],antilles:[[15.5,-61.4],8],suisse:[[46.5,6.6],8],belgique:[[50.6,4.7],8],canada:[[47,-72],6]};
-/* Selecteur de zone en menu personnalise : recliquer une zone (meme deja active)
-   recadre sur sa vue globale ; le libelle reflete la vue reelle (au relancement aussi). */
-var ZBOX=[["reunion",-22,-20,55,56],["guyane",2,6,-55,-51],["antilles",14,17,-62,-60],["suisse",45.9,47.7,5.9,7.8],["belgique",49.5,51.6,2.5,6.4],["canada",41,84,-141,-52]];
-function zoneDeCentre(lat,lng){for(var i=0;i<ZBOX.length;i++){var z=ZBOX[i];if(lat>=z[1]&&lat<=z[2]&&lng>=z[3]&&lng<=z[4])return z[0];}return "metropole";}
-var ZLIST=[["metropole","Métropole"],["guyane","Guyane"],["reunion","La Réunion"],["antilles","Antilles"],["suisse","Suisse romande"],["belgique","Belgique"],["canada","Canada"]];
-function libZone(k){for(var i=0;i<ZLIST.length;i++){if(ZLIST[i][0]===k)return ZLIST[i][1];}return "Métropole";}
-var zoneBtn=document.getElementById("zone-btn"), zoneMenu=document.getElementById("zone-menu"), zoneLab=document.getElementById("zone-lab");
-var zoneCourante="metropole";
-function fermerZoneMenu(){ if(zoneMenu){zoneMenu.hidden=true;} if(zoneBtn){zoneBtn.setAttribute("aria-expanded","false");} }
-function allerZone(k){ var z=ZONES[k]; if(z){ zoneCourante=k; if(zoneLab)zoneLab.textContent=libZone(k); majZoneCount(); map.flyTo(z[0],z[1]); } fermerZoneMenu(); }
-function syncZone(){ if(!zoneLab)return; var c=map.getCenter(); var z=zoneDeCentre(c.lat,c.lng); zoneCourante=z; zoneLab.textContent=libZone(z); majZoneCount(); }
-if(zoneBtn&&zoneMenu){
-  ZLIST.forEach(function(zz){ var b=document.createElement("button"); b.type="button"; b.dataset.z=zz[0]; b.textContent=zz[1]; b.addEventListener("click",function(e){e.stopPropagation();allerZone(zz[0]);}); zoneMenu.appendChild(b); });
-  zoneBtn.addEventListener("click",function(e){ e.stopPropagation(); var ferme=zoneMenu.hidden; if(ferme){ var cc=comptesParZone(); zoneMenu.querySelectorAll("button").forEach(function(b){b.classList.toggle("on",b.dataset.z===zoneCourante);b.textContent=libZone(b.dataset.z)+(b.dataset.z===zoneCourante?"":" ("+(cc[b.dataset.z]||0)+")");}); zoneMenu.hidden=false; zoneBtn.setAttribute("aria-expanded","true"); } else { fermerZoneMenu(); } });
-  document.addEventListener("click",function(e){ if(zoneMenu&&!zoneMenu.hidden&&!zoneMenu.contains(e.target)&&!zoneBtn.contains(e.target)) fermerZoneMenu(); });
+/* ---- Regions groupees par pays (menu "Aller a...") ---- */
+var FLAG={Belgique:"🇧🇪",Canada:"🇨🇦",France:"🇫🇷",Suisse:"🇨🇭"};
+var GRP={
+ Belgique:["Anvers (Antwerpen)","Brabant flamand (Vlaams-Brabant)","Brabant wallon","Bruxelles-Capitale","Flandre-Occidentale (West-Vlaanderen)","Flandre-Orientale (Oost-Vlaanderen)","Hainaut","Liège","Limbourg (Limburg)","Luxembourg","Namur"],
+ Canada:["Abitibi-Témiscamingue","Bas-Saint-Laurent","Capitale-Nationale","Centre-du-Québec","Chaudière-Appalaches","Côte-Nord","Estrie","Gaspésie–Îles-de-la-Madeleine","Lanaudière","Laurentides","Laval","Mauricie","Montérégie","Montréal","Nord-du-Québec","Outaouais","Saguenay–Lac-Saint-Jean"],
+ FranceMetro:["Auvergne-Rhône-Alpes","Bourgogne-Franche-Comté","Bretagne","Centre-Val de Loire","Corse","Grand Est","Hauts-de-France","Île-de-France","Normandie","Nouvelle-Aquitaine","Occitanie","Pays de la Loire","Provence-Alpes-Côte d'Azur"],
+ DROM:["Guadeloupe","Guyane","La Réunion","Martinique","Mayotte"],
+ Suisse:["Appenzell Rhodes-Extérieures","Appenzell Rhodes-Intérieures","Argovie","Bâle-Campagne","Bâle-Ville","Berne","Fribourg","Genève","Glaris","Grisons","Jura","Lucerne","Neuchâtel","Nidwald","Obwald","Saint-Gall","Schaffhouse","Schwytz","Soleure","Tessin","Thurgovie","Uri","Valais","Vaud","Zoug","Zurich"]
+};
+var REG_PAYS={};Object.keys(GRP).forEach(function(g){var p=(g==="FranceMetro"||g==="DROM")?"France":g;GRP[g].forEach(function(r){REG_PAYS[r]=p;});});["Belgique","Canada","Suisse","France"].forEach(function(p){REG_PAYS[p]=p;});
+function paysDeRegion(r){return REG_PAYS[r]||"France";}
+var RCODE={"01":"Auvergne-Rhône-Alpes","02":"Bourgogne-Franche-Comté","03":"Bretagne","04":"Centre-Val de Loire","05":"Corse","06":"Grand Est","07":"Hauts-de-France","08":"Île-de-France","09":"Normandie","10":"Nouvelle-Aquitaine","11":"Occitanie","12":"Pays de la Loire","13":"Provence-Alpes-Côte d'Azur","14":"Guadeloupe","15":"Martinique","16":"Guyane","17":"La Réunion","18":"Mayotte","19":"Belgique","20":"Suisse","21":"Canada"};
+var regionBtn=document.getElementById("zone-btn"), regionMenu=document.getElementById("zone-menu"), regionLab=document.getElementById("zone-lab");
+var regionCourante="", regMenuQ="";
+function comptesParRegion(){var c={};markers.forEach(function(m){if(!visible(m))return;var r=m._props.region||"";if(r)c[r]=(c[r]||0)+1;});return c;}
+function regionsMasquees(){ try{return JSON.parse(mstore.get("regMasq")||"[]");}catch(e){return [];} }
+function fermerRegionMenu(){ if(regionMenu){regionMenu.hidden=true;} if(regionBtn){regionBtn.setAttribute("aria-expanded","false");} }
+function ptsPour(pred){var pts=[];markers.forEach(function(m){if(visible(m)&&pred(m._props.region||""))pts.push(m.getLatLng());});return pts;}
+function cadrer(pts){if(pts.length)map.fitBounds(L.latLngBounds(pts),{padding:[45,45],maxZoom:12,animate:true});}
+function allerPays(p){regionCourante=p;if(regionLab)regionLab.textContent=p;var metro=(p==="France");cadrer(ptsPour(function(r){return paysDeRegion(r)===p&&(!metro||GRP.FranceMetro.indexOf(r)>=0);}));fermerRegionMenu();}
+function allerRegion(r){ if(["Belgique","Canada","Suisse"].indexOf(r)>=0){allerPays(r);return;} regionCourante=r;if(regionLab)regionLab.textContent=r||"Aller à…";cadrer(ptsPour(function(x){return r===""||x===r;}));fermerRegionMenu(); }
+function ligneMenu(txt,count,cls,onClick){var b=document.createElement("button");b.type="button";if(cls)b.className=cls;b.textContent=txt+(count!=null?" ("+count+")":"");b.addEventListener("click",function(e){e.stopPropagation();onClick();});regionMenu.appendChild(b);}
+function construireMenuRegions(){ if(!regionMenu)return; var cc=comptesParRegion(); var masq=regionsMasquees(); var q=(regMenuQ||"").toLowerCase(); regionMenu.innerHTML="";
+  var sr=document.createElement("input");sr.type="text";sr.placeholder="Rechercher…";sr.className="reg-search";sr.value=regMenuQ;sr.addEventListener("click",function(e){e.stopPropagation();});sr.addEventListener("input",function(){regMenuQ=sr.value;var p=sr.selectionStart;construireMenuRegions();var n=regionMenu.querySelector(".reg-search");if(n){n.focus();try{n.setSelectionRange(p,p);}catch(e){}}});regionMenu.appendChild(sr);
+  function mtch(x){return !q||x.toLowerCase().indexOf(q)>=0;}
+  function cumul(pred){var n=0;Object.keys(cc).forEach(function(r){if(pred(r))n+=cc[r];});return n;}
+  if(mtch("Toutes les régions")) ligneMenu("Toutes les régions",null,regionCourante===""?"on":"",function(){allerRegion("");});
+  function bloc(pays,liste,headLbl,headCumul){
+    var subs=liste.filter(function(r){return cc[r]&&masq.indexOf(r)<0&&mtch(r);});
+    if(!subs.length && !(headCumul&&mtch(headLbl))) return;
+    if(headCumul) ligneMenu(headLbl,headCumul,"reg-head"+(regionCourante===pays?" on":""),function(){allerPays(pays);});
+    subs.forEach(function(r){ligneMenu(r,cc[r],"reg-sub"+(r===regionCourante?" on":""),function(){allerRegion(r);});});
+  }
+  bloc("Belgique",GRP.Belgique,FLAG.Belgique+" Belgique",cumul(function(r){return paysDeRegion(r)==="Belgique";}));
+  bloc("Canada",GRP.Canada,FLAG.Canada+" Canada",cumul(function(r){return paysDeRegion(r)==="Canada";}));
+  bloc("France",GRP.FranceMetro,FLAG.France+" France (métropole)",cumul(function(r){return GRP.FranceMetro.indexOf(r)>=0;}));
+  GRP.DROM.filter(function(r){return cc[r]&&masq.indexOf(r)<0&&mtch(r);}).forEach(function(r){ligneMenu(r,cc[r],"reg-sub"+(r===regionCourante?" on":""),function(){allerRegion(r);});});
+  bloc("Suisse",GRP.Suisse,FLAG.Suisse+" Suisse",cumul(function(r){return paysDeRegion(r)==="Suisse";}));
 }
-map.on("moveend",syncZone); setTimeout(syncZone,300);
+if(regionBtn&&regionMenu){
+  regionBtn.addEventListener("click",function(e){ e.stopPropagation(); var ferme=regionMenu.hidden; if(ferme){ regMenuQ=""; construireMenuRegions(); regionMenu.hidden=false; regionBtn.setAttribute("aria-expanded","true"); } else { fermerRegionMenu(); } });
+  document.addEventListener("click",function(e){ if(regionMenu&&!regionMenu.hidden&&!regionMenu.contains(e.target)&&!regionBtn.contains(e.target)) fermerRegionMenu(); });
+}
+/* Modale "Choisissez les raccourcis de selection" (masquage) */
+var regModalMasq=null;
+function buildRegModal(q){
+  q=(q||"").toLowerCase(); var host=document.getElementById("reg-modal-list"); if(!host)return;
+  var pres={};markers.forEach(function(m){var r=m._props.region||"";if(r)pres[r]=true;}); host.innerHTML="";
+  [["Belgique",GRP.Belgique],["Canada",GRP.Canada],["France (métropole)",GRP.FranceMetro],["Outre-mer",GRP.DROM],["Suisse",GRP.Suisse]].forEach(function(g){
+    var subs=g[1].filter(function(r){return pres[r]&&(!q||r.toLowerCase().indexOf(q)>=0);}); if(!subs.length)return;
+    var h=document.createElement("div");h.className="rm-h";h.textContent=g[0];host.appendChild(h);
+    subs.forEach(function(r){var lab=document.createElement("label");lab.className="rm-row";var cb=document.createElement("input");cb.type="checkbox";cb.checked=regModalMasq.indexOf(r)<0;cb.addEventListener("change",function(){if(cb.checked){regModalMasq=regModalMasq.filter(function(x){return x!==r;});}else if(regModalMasq.indexOf(r)<0){regModalMasq.push(r);}});var sp=document.createElement("span");sp.textContent=r;lab.appendChild(cb);lab.appendChild(sp);host.appendChild(lab);});
+  });
+}
+function ouvrirRegModal(){var g=document.getElementById("guideOverlay");if(g)g.classList.remove("open");regModalMasq=regionsMasquees().slice();var qi=document.getElementById("reg-modal-q");if(qi)qi.value="";buildRegModal("");document.getElementById("reg-modal").classList.add("ouvert");}
+(function(){var b=document.getElementById("cfg-reg-modal");if(b)b.addEventListener("click",ouvrirRegModal);
+  var qi=document.getElementById("reg-modal-q");if(qi)qi.addEventListener("input",function(){buildRegModal(this.value);});
+  var ok=document.getElementById("reg-modal-ok");if(ok)ok.addEventListener("click",function(){mstore.set("regMasq",JSON.stringify(regModalMasq||[]));document.getElementById("reg-modal").classList.remove("ouvert");});
+  var no=document.getElementById("reg-modal-non");if(no)no.addEventListener("click",function(){document.getElementById("reg-modal").classList.remove("ouvert");});
+  var mo=document.getElementById("reg-modal");if(mo)mo.addEventListener("click",function(e){if(e.target===mo)mo.classList.remove("ouvert");});
+})();
 
 /* ---------- recherche unifiee (loupe en-tete) : association/ville, prete pour les types ---------- */
 (function(){
@@ -659,7 +722,7 @@ map.on("moveend",syncZone); setTimeout(syncZone,300);
   function entites(){
     var vus={},out=[];
     markers.forEach(function(m){
-      var p=m._props||{},n=p.nom; if(!n) return;
+      var p=m._props||{},n=p.nom; if(!n) return; if(!visible(m)) return;
       var t=p.type||"association", key=t+"|"+n;
       if(!vus[key]){vus[key]={nom:n,type:t,m:m};out.push(vus[key]);}
     });
@@ -693,6 +756,7 @@ map.on("moveend",syncZone); setTimeout(syncZone,300);
   function badge(t){
     if(t==="pair_aidant")return '<span class="sp-tag pa">pair-aidant</span>';
     if(t==="restaurant")return '<span class="sp-tag re">restaurant</span>';
+    if(t==="apa")return '<span class="sp-tag ap">APA</span>';
     return '<span class="sp-tag as">association</span>';
   }
   function rendre(){
@@ -822,9 +886,9 @@ var _svT; map.on("moveend",function(){clearTimeout(_svT);_svT=setTimeout(saveSet
 var newsData=[];
 function renderNews(md){var h=marked.parse(md||"");return h.replace(/<a href="(https?:[^"]*)"/g,'<a href="$1" target="_blank" rel="noopener"');}
 function dateVal(s){var m=/(\d{2})\/(\d{2})\/(\d{4})/.exec(s||"");return m?(parseInt(m[3],10)*10000+parseInt(m[2],10)*100+parseInt(m[1],10)):0;}
-var RUBLBL={app:"Nouvelles fonctions",restaurant:"Restaurants",association:"Associations",pair_aidant:"Pair-aidants"};
-var RUBORDER=["app","restaurant","association","pair_aidant"];
-function newsVisibles(){return newsData.filter(function(it){var r=it.rubrique||"app";if(r==="restaurant")return typeVisible.restaurant;if(r==="association")return typeVisible.association;if(r==="pair_aidant")return typeVisible.pair_aidant;return true;});}
+var RUBLBL={app:"Nouvelles fonctions",restaurant:"Restaurants",association:"Associations",pair_aidant:"Pair-aidants",apa:"Activités physiques adaptées"};
+var RUBORDER=["app","restaurant","association","pair_aidant","apa"];
+function newsVisibles(){return newsData.filter(function(it){var r=it.rubrique||"app";if(r==="restaurant")return typeVisible.restaurant;if(r==="association")return typeVisible.association;if(r==="pair_aidant")return typeVisible.pair_aidant;if(r==="apa")return typeVisible.apa;return true;});}
 function afficherNewsModal(items){
   items=items.slice().sort(function(a,b){return dateVal(b.date)-dateVal(a.date);});
   var groups={}; items.forEach(function(it){var r=it.rubrique||"app";(groups[r]=groups[r]||[]).push(it);});
@@ -833,7 +897,7 @@ function afficherNewsModal(items){
   document.getElementById("news-modal").classList.add("ouvert");
 }
 function montrerNews(auto){
-  var aucun=!typeVisible.association&&!typeVisible.pair_aidant&&!typeVisible.restaurant; if(aucun)return;
+  var aucun=!typeVisible.association&&!typeVisible.pair_aidant&&!typeVisible.restaurant&&!typeVisible.apa; if(aucun)return;
   var vis=newsVisibles();
   if(!auto){ afficherNewsModal(vis); return; }
   if(mstore.get("newsOn")===false) return;

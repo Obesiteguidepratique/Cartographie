@@ -1,6 +1,11 @@
 {
- "date_maj": "23/08/2026",
+ "date_maj": "05/09/2026",
  "news": [
+  {
+   "date": "05/09/2026",
+   "rubrique": "app",
+   "contenu": "Ajout du slider de sélection par date\nModification de la sélection rapide"
+  },
   {
    "date": "23/08/2026",
    "rubrique": "restaurant",
