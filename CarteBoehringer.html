@@ -206,6 +206,9 @@
   .f-yes{background:var(--violet);color:#fff;} .f-ghost{background:var(--paper);color:var(--slate);border:1px solid var(--line)!important;} .f-kofi{background:#72a4f2;color:#fff;}
   
   #kofi-banner{border-left:4px solid #72a4f2;}
+  #demo-modal{z-index:3200;}
+  #demo-modal .modal-box.demo-box{max-width:420px;height:auto;max-height:none;border-radius:14px;text-align:center;padding:28px 24px 22px;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+  #demo-modal .demo-txt{font-size:16px;font-weight:700;color:var(--slate);line-height:1.5;margin:0 0 20px;text-align:center;}
   @media (max-width:600px){.leaflet-popup-content{width:220px !important;}.modal{padding:0;}.modal-box{border-radius:0;height:100vh;height:100dvh;max-height:100dvh;}.modal-bar{padding-top:calc(12px + env(safe-area-inset-top,0px));}.guide-tab span{display:none;}}
 </style>
 </head>
@@ -241,6 +244,12 @@
 <div id="alarme-vide">⚠️ Aucune association affichée — un critère masque tout. Ouvrez <b>Aide → Configuration</b> pour réactiver un critère.</div>
 <div id="hint" style="display:none"><p>⏳ <b>Base de données en cours de mise à jour…</b><br>La carte va se recharger automatiquement.</p></div>
 
+<div class="modal ouvert" id="demo-modal" role="dialog" aria-modal="true">
+  <div class="modal-box demo-box">
+    <p class="demo-txt">Cette version est strictement réservée à Boehringer<br>dans le cadre d'une démonstration.</p>
+    <button class="ap-btn" id="demo-ok" type="button" style="min-width:120px;background:var(--violet);border-color:var(--violet);color:#fff;font-weight:700;">OK</button>
+  </div>
+</div>
 <div class="modal" id="news-modal" role="dialog" aria-modal="true">
   <div class="modal-box" style="max-width:440px;">
     <div class="modal-bar"><span class="m-nom">✨ Dernières nouveautés</span><button class="close" id="news-close">&times;</button></div>
@@ -824,6 +833,8 @@ document.getElementById("ap-envoyer").addEventListener("click",function(){var ur
 (function(){var url=location.origin+location.pathname;var txt="Baria-ressources \u2014 la cartographie des ressources pour les opérés bariatriques";var eu=encodeURIComponent(url),et=encodeURIComponent(txt);function S(id,h){var e=document.getElementById(id);if(e)e.href=h;}S("sh-fb","https://www.facebook.com/sharer/sharer.php?u="+eu);S("sh-wa","https://wa.me/?text="+encodeURIComponent(txt+" "+url));S("sh-li","https://www.linkedin.com/sharing/share-offsite/?url="+eu);S("sh-tw","https://twitter.com/intent/tweet?text="+et+"&url="+eu);S("sh-em","mailto:?subject="+encodeURIComponent("Baria-ressources")+"&body="+encodeURIComponent(txt+"\n"+url));})();
 document.getElementById("ap-supported").addEventListener("click",function(){mstore.set("kofi_supporter",1);document.getElementById("kofi-banner").style.display="none";toast("Merci beaucoup ! ☕");});
 
+/* ---------- pop-up de demonstration (au chargement) ---------- */
+document.getElementById("demo-ok").addEventListener("click",function(){document.getElementById("demo-modal").classList.remove("ouvert");});
 /* ---------- init ---------- */
 setTimeout(function(){try{checkKofi();}catch(e){}},1800);
 var _svT; map.on("moveend",function(){clearTimeout(_svT);_svT=setTimeout(saveSettings,500);});
